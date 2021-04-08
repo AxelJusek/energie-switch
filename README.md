@@ -10,7 +10,7 @@ In order not to violate anyones copyright, the name must not fit the original co
 This project lay dormant for a while and was hosted only on my private systems. I decided now to put it out into the wild, in the hope that it may be helpful and i find the time to update it to the state of the art and replace the german words with english ones. To get it out I had to do some very HOT-Fixes about the names, that may cause some refactoring troubles, please handle the code with extra care.
 
 # Disclaimer
-This is not productive code! Do not use is for any purpose but for educational purposes. This code is available under the license of GPLv3 of the FSF.
+This is not productive code! Do not use this for any purpose but for educational purposes. This code is available under the license of GPLv3 of the FSF.
 
 THERE IS NO WARRANTY!
 
