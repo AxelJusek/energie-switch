@@ -1,35 +1,21 @@
 package de.axeljusek.servertools.energie;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 import de.axeljusek.servertools.energie.SchaltZustand;
 import de.axeljusek.servertools.energie.VerbindungEnerGie;
 
 public class SchaltZustandTest {
 
-	//@Test
-	public void testSchaltZustand() {
-		fail("Not yet implemented");
-	}
-
-	//@Test
-	public void testSchalten() {
-		fail("Not yet implemented");
-	}
-
-	//@Test
-	public void testGetSchaltZustand() {
-		fail("Not yet implemented");
-	}
-
+	
 	@Test
 	public void testBerechneStatusWert() {
 		VerbindungEnerGie veg = new VerbindungEnerGie();
-		assertNotNull("Verbindungsobjekt wurder erfolgreich erzeugt.", veg);
+		assertNotNull( veg, "Verbindungsobjekt wurder erfolgreich erzeugt.");
 		
 		SchaltZustand sz = new SchaltZustand(veg);
 		
@@ -41,7 +27,7 @@ public class SchaltZustandTest {
 		int t2 = 119;
 		
 		int value = sz.berechneStatusWert(dose, sc0, k1, k0, t3, t2);
-		Assert.assertEquals("Erster Test der Berechnung", 65, value);
+		assertEquals( 65, value, "Erster Test der Berechnung");
 		
 		 sc0 = 237;
 		 k1 = 32;
@@ -49,7 +35,7 @@ public class SchaltZustandTest {
 		 t3 = 7;
 		 t2 = 119;
 		 value = sz.berechneStatusWert(dose, sc0, k1, k0, t3, t2);
-		 Assert.assertEquals("Erster Test der Berechnung", 130, value);
+		 assertEquals( 130, value, "Erster Test der Berechnung");
 			
 		 
 		veg.verbindungTrennen();

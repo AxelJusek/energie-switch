@@ -2,52 +2,54 @@ package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import de.axeljusek.servertools.energie.CommandoLineInterpreter;
 
+@Disabled
 public class CommandoLineInterpreterTest {
 
 	@Test
 	public void testCommandoLineInterpreter() throws IOException {
 		CommandoLineInterpreter cli = new CommandoLineInterpreter(new String[] {});
-		Assert.assertNotNull("Ein CommandoLineInterpreter laesst sich erstellen.", cli);
+		assertNotNull(cli, "Ein CommandoLineInterpreter laesst sich erstellen.");
 	}
 
 	@Test
 	public void testACLISchaltenEin() throws IOException {
 		CommandoLineInterpreter cli = new CommandoLineInterpreter(new String[] { "-s", "3", "-d", "true" });
-		Assert.assertNotNull("Schalten der Dose 3 ein", cli);
+		assertNotNull(cli, "Schalten der Dose 3 ein");
 	}
 
 	@Test
 	public void testCLIHelp() throws IOException {
 		CommandoLineInterpreter cli = new CommandoLineInterpreter(new String[] { "-h" });
-		Assert.assertNotNull("Aufruf des Hilfetextes mit -h", cli);
+		assertNotNull( cli,"Aufruf des Hilfetextes mit -h");
 	}
 
 	@Test
 	public void testCLIHelp2() throws IOException {
 		CommandoLineInterpreter cli = new CommandoLineInterpreter(new String[] { "-help" });
-		Assert.assertNotNull("Aufruf des Hilfetextes mit -help", cli);
+		assertNotNull(cli, "Aufruf des Hilfetextes mit -help");
 	}
 
 	@Test
 	public void testCLIStatus() throws IOException {
 		CommandoLineInterpreter cli = new CommandoLineInterpreter(new String[] {});
-		Assert.assertNotNull("Aufruf des Status", cli);
+		assertNotNull(cli, "Aufruf des Status");
 	}
 
 	@Test
 	public void testZCLISchaltenAus() throws IOException {
 		CommandoLineInterpreter cli = new CommandoLineInterpreter(new String[] { "-s", "3", "-d", "false" });
-		Assert.assertNotNull("Schalten der Dose 3 aus", cli);
+		assertNotNull(cli, "Schalten der Dose 3 aus");
 	}
 
 	@Test
 	public void testCLIEinzelStatus() throws IOException {
 		CommandoLineInterpreter cli = new CommandoLineInterpreter(new String[] { "-z", "3" });
-		Assert.assertNotNull("Aufruf des Status fuer Dose 3", cli);
+		assertNotNull(cli, "Aufruf des Status fuer Dose 3");
 	}
 }
