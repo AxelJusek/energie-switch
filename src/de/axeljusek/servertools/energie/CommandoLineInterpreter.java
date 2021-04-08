@@ -1,7 +1,7 @@
 /**
  *
  */
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -82,7 +82,7 @@ public class CommandoLineInterpreter {
 	}
 
 	private void zustandAbfragen(Verbindungsdaten verbindungsDaten, String doseNr) throws IOException {
-		VerbindungEnerGenie vEnGen = verbindungAufbauen(verbindungsDaten);
+		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
 		Integer dose = Integer.parseInt(doseNr);
 		SchaltZustand sz = new SchaltZustand(vEnGen);
 
@@ -135,7 +135,7 @@ public class CommandoLineInterpreter {
 	}
 
 	private void schaltzustaendeAusgeben(Verbindungsdaten verbindungsDaten) throws IOException {
-		VerbindungEnerGenie vEnGen = verbindungAufbauen(verbindungsDaten);
+		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
 
 		SchaltZustand sz = new SchaltZustand(vEnGen);
 
@@ -146,7 +146,7 @@ public class CommandoLineInterpreter {
 	}
 
 	private void doseSchalten(Verbindungsdaten verbindungsDaten, String doseNr, String einschalten) throws IOException {
-		VerbindungEnerGenie vEnGen = verbindungAufbauen(verbindungsDaten);
+		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
 
 		SchaltZustand sz = new SchaltZustand(vEnGen);
 		boolean ein = Boolean.parseBoolean(einschalten);
@@ -156,9 +156,9 @@ public class CommandoLineInterpreter {
 		vEnGen.verbindungTrennen();
 	}
 
-	protected VerbindungEnerGenie verbindungAufbauen(Verbindungsdaten verbindungsDaten) throws IOException {
+	protected VerbindungEnerGie verbindungAufbauen(Verbindungsdaten verbindungsDaten) throws IOException {
 
-		VerbindungEnerGenie vEnGen = new VerbindungEnerGenie();
+		VerbindungEnerGie vEnGen = new VerbindungEnerGie();
 		byte[] key = vEnGen.putPasswordInArray(verbindungsDaten.getPasswd());
 
 		log.info("Es werden die folgenden Parameter verwendet: \n" + "IP-Adresse '" + verbindungsDaten.getIpAddress()

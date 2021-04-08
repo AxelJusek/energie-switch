@@ -1,7 +1,7 @@
 /**
  *
  */
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 /**
  * @author axel
@@ -17,6 +17,6 @@ public enum ControlAndPeriodScheduleEntry {
 	}
 
 	public byte getByte() {
-		return (byte) Byte.toUnsignedInt(VerbindungEnerGenie.hexStringToByteArray(this.byteExpression)[0]);
+		return (byte) Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray(this.byteExpression)[0]);
 	}
 }

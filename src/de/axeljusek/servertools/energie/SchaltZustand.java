@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 
 import org.apache.logging.log4j.LogManager;
@@ -18,12 +18,12 @@ public class SchaltZustand {
 	
 	private byte[] key;
 	private byte[] task;
-	private int cn = Byte.toUnsignedInt(VerbindungEnerGenie.hexStringToByteArray("04")[0]); //Nicht schalten - Neutral
-	private int ce = Byte.toUnsignedInt(VerbindungEnerGenie.hexStringToByteArray("01")[0]); //Einschalten
-	private int ca = Byte.toUnsignedInt(VerbindungEnerGenie.hexStringToByteArray("02")[0]); //Ausschalten
-	private VerbindungEnerGenie verEngenie;
+	private int cn = Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray("04")[0]); //Nicht schalten - Neutral
+	private int ce = Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray("01")[0]); //Einschalten
+	private int ca = Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray("02")[0]); //Ausschalten
+	private VerbindungEnerGie verEngenie;
 
-	public SchaltZustand(VerbindungEnerGenie verEngenie)
+	public SchaltZustand(VerbindungEnerGie verEngenie)
 	{
 		this.verEngenie = verEngenie;		
 		this.key= this.verEngenie.getKey();
@@ -61,23 +61,23 @@ public class SchaltZustand {
 	}
 
 	private byte encryptControlForDose(int dose, int cByte, int k1, int k0, int t3, int t2) {
-		VerbindungEnerGenie.log.info("ctrlcryp[i]=(((ctrl[3-i]^task[2])+task[3])^key[0])+key[1]");
-		VerbindungEnerGenie.log.info("Mit i="+dose);
-		VerbindungEnerGenie.log.info("ctrlcryp["+dose+"]=((("+new Integer(cByte).toString()+"^"+new Integer(t2).toString()+")+"+new Integer(t3).toString()+")^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp[i]=(((ctrl[3-i]^task[2])+task[3])^key[0])+key[1]");
+		VerbindungEnerGie.log.info("Mit i="+dose);
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=((("+new Integer(cByte).toString()+"^"+new Integer(t2).toString()+")+"+new Integer(t3).toString()+")^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
 		
 		int int1=cByte^t2;
-		VerbindungEnerGenie.log.info("ctrlcryp["+dose+"]=(("+new Integer(int1).toString()+"+"+new Integer(t3).toString()+")^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=(("+new Integer(int1).toString()+"+"+new Integer(t3).toString()+")^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
 		
 		int int2=int1 +t3;
-		VerbindungEnerGenie.log.info("ctrlcryp["+dose+"]=("+new Integer(int2).toString()+"^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=("+new Integer(int2).toString()+"^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
 		
 		int int3=int2^k0;
-		VerbindungEnerGenie.log.info("ctrlcryp["+dose+"]="+new Integer(int3).toString()+"+"+new Integer(k1).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]="+new Integer(int3).toString()+"+"+new Integer(k1).toString()+"");
 		
 		int int4=int3+k1;
-		VerbindungEnerGenie.log.info("ctrlcryp["+dose+"]="+new Integer(int4).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]="+new Integer(int4).toString()+"");
 		
-		byte result = VerbindungEnerGenie.convertIntToHexByteArray(int4)[1];
+		byte result = VerbindungEnerGie.convertIntToHexByteArray(int4)[1];
 		return result;
 	}
 	
@@ -99,7 +99,7 @@ public class SchaltZustand {
 		
 		int int4 = berechneStatusWert(dose, sc0, k1, k0, t3, t2);		
 		
-		byte[] result = VerbindungEnerGenie.convertIntToHexByteArray(int4);
+		byte[] result = VerbindungEnerGie.convertIntToHexByteArray(int4);
 				
 		Schaltzustaende schaltZustand = Schaltzustaende.getZustandByInt(int4);
 		log.info("Schaltzustand:"+ result[0] + ":" + result[1]);

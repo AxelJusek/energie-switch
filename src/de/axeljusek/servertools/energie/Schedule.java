@@ -1,7 +1,7 @@
 /**
  *
  */
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public class Schedule {
 	private byte[] timestamp = new byte[4];
 	private List<ScheduleEntry> entries = new ArrayList<>();
-	private byte loopPeriodMarker = (byte) Byte.toUnsignedInt(VerbindungEnerGenie.hexStringToByteArray("E5")[0]);
+	private byte loopPeriodMarker = (byte) Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray("E5")[0]);
 	private byte[] loopPeriod = new byte[4];
 	private byte socketNr; // Socket-Nummber and Dummy bit - the most significant bit
 	private byte[] checksum = new byte[2];

@@ -1,7 +1,7 @@
 /**
  *
  */
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
  * @author axel
  *
  */
-public class VerbindungEnerGenie {
+public class VerbindungEnerGie {
 
 	static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
 	private Socket socket;
@@ -30,7 +30,7 @@ public class VerbindungEnerGenie {
 	private byte[] encryptedStatus;
 	private int warteMilliSekunden = 800;
 
-	public VerbindungEnerGenie() {
+	public VerbindungEnerGie() {
 
 	}
 

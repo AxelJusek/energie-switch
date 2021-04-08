@@ -3,9 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.axeljusek.servertools</groupId>
-	<artifactId>energenie-switch</artifactId>
+	<artifactId>energie-switch</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>EnerGenie_Switch</name>
+	<name>EnerGie_Switch</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
 
 	<dependencies>
 		<dependency>

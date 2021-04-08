@@ -1,4 +1,4 @@
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 public enum Konfigurationswerte {
 	port("port", "Number", "5", "5000"),

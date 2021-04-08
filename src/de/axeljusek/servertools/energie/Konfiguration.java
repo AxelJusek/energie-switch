@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 import java.io.File;
 import java.io.FileInputStream;

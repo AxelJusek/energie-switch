@@ -1,9 +1,11 @@
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import de.axeljusek.servertools.energie.CommandoLineInterpreter;
 
 public class CommandoLineInterpreterTest {
 

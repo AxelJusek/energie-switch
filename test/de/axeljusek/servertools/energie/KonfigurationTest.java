@@ -1,4 +1,4 @@
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 
 import org.junit.Test;
+
+import de.axeljusek.servertools.energie.Konfiguration;
 
 public class KonfigurationTest {
 

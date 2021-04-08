@@ -1,10 +1,13 @@
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import de.axeljusek.servertools.energie.SchaltZustand;
+import de.axeljusek.servertools.energie.VerbindungEnerGie;
 
 public class SchaltZustandTest {
 
@@ -25,7 +28,7 @@ public class SchaltZustandTest {
 
 	@Test
 	public void testBerechneStatusWert() {
-		VerbindungEnerGenie veg = new VerbindungEnerGenie();
+		VerbindungEnerGie veg = new VerbindungEnerGie();
 		assertNotNull("Verbindungsobjekt wurder erfolgreich erzeugt.", veg);
 		
 		SchaltZustand sz = new SchaltZustand(veg);

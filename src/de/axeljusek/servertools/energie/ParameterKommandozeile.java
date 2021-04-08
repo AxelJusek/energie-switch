@@ -1,4 +1,4 @@
-package de.axeljusek.servertools.energenie;
+package de.axeljusek.servertools.energie;
 
 public enum ParameterKommandozeile {
 	HilfeAnzeigen("-h", false, null,"", "Zeigt diesen Hilfetext an."),
