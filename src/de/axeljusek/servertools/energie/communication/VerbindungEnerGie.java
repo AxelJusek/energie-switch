@@ -46,11 +46,13 @@ import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 /**
  * @author axel
  *
  */
-public class VerbindungEnerGie {
+
+public class VerbindungEnerGie implements ConnectionEnergie{
 
 	static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
 	private Socket socket;
@@ -65,7 +67,7 @@ public class VerbindungEnerGie {
 	private int warteMilliSekunden = 800;
 
 	public VerbindungEnerGie() {
-
+		//Default Constructor for Dependency Injection.
 	}
 
 	public byte[] getTaskBuf() {
@@ -417,7 +419,7 @@ public class VerbindungEnerGie {
 		}
 	}
 	
-	public static void zustandAbfragen(Verbindungsdaten verbindungsDaten, String doseNr) throws IOException {
+	public void zustandAbfragen(Verbindungsdaten verbindungsDaten, String doseNr) throws IOException {
 		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
 		Integer dose = Integer.parseInt(doseNr);
 		SchaltZustand sz = new SchaltZustand(vEnGen);
@@ -429,7 +431,7 @@ public class VerbindungEnerGie {
 
 	
 
-	public static void schaltzustaendeAusgeben(Verbindungsdaten verbindungsDaten) throws IOException {
+	public void schaltzustaendeAusgeben(Verbindungsdaten verbindungsDaten) throws IOException {
 		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
 
 		SchaltZustand sz = new SchaltZustand(vEnGen);
@@ -440,7 +442,7 @@ public class VerbindungEnerGie {
 		vEnGen.verbindungTrennen();
 	}
 
-	public static void doseSchalten(Verbindungsdaten verbindungsDaten, String doseNr, String einschalten) throws IOException {
+	public void doseSchalten(Verbindungsdaten verbindungsDaten, String doseNr, String einschalten) throws IOException {
 		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
 
 		SchaltZustand sz = new SchaltZustand(vEnGen);

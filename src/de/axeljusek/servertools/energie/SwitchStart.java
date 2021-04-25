@@ -39,7 +39,12 @@ package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import de.axeljusek.servertools.energie.commandline.CommandLineModule;
 import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
+import de.axeljusek.servertools.energie.communication.ConnectionModule;
 
 /**
  * @author axel
@@ -47,9 +52,7 @@ import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
  */
 public class SwitchStart {
 
-	/**
-	 *
-	 */
+	
 	public SwitchStart() {
 		// Nix
 	}
@@ -59,7 +62,11 @@ public class SwitchStart {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		new CommandoLineInterpreter(args);
+		Injector injector = Guice.createInjector(
+				new ConnectionModule(),
+				new CommandLineModule(args)
+				);
+	    injector.getInstance(CommandoLineInterpreter.class);
 	}
 
 }

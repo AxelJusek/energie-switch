@@ -41,11 +41,13 @@ import java.io.IOException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.inject.Inject;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.axeljusek.servertools.energie.communication.Commando;
-import de.axeljusek.servertools.energie.communication.VerbindungEnerGie;
+import de.axeljusek.servertools.energie.communication.ConnectionEnergie;
 import de.axeljusek.servertools.energie.communication.Verbindungsdaten;
 
 /**
@@ -54,14 +56,22 @@ import de.axeljusek.servertools.energie.communication.Verbindungsdaten;
  */
 public class CommandoLineInterpreter {
 
+	@Inject
+	private ConnectionEnergie conEnergie;
+
 	static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
 
-	public CommandoLineInterpreter(String[] args) throws IOException {
+	@Inject
+	public CommandoLineInterpreter(String[] args) {
 		SortedSet<Commando> operationsParameter = null;
 
 		operationsParameter = parameterAuswerten(args);
 
-		commandoUmsetzen(operationsParameter);
+		try {
+			commandoUmsetzen(operationsParameter);
+		} catch (IOException e) {
+			log.error(e);
+		}
 	}
 
 	private SortedSet<Commando> parameterAuswerten(String[] args) {
@@ -99,20 +109,20 @@ public class CommandoLineInterpreter {
 					break;
 				case SchaltenEinerDoseDosenNr:
 					String einschalten = commando.getFollowParameter();
-					VerbindungEnerGie.doseSchalten(verbindungsDaten, doseNr, einschalten);
+					conEnergie.doseSchalten(verbindungsDaten, doseNr, einschalten);
 					break;
 				case SchaltenEinerDoseGewuenschterZustand:
 					break;
 				case ZustandEinerDoseAbfragen:
-					VerbindungEnerGie.zustandAbfragen(verbindungsDaten, doseNr);
+					conEnergie.zustandAbfragen(verbindungsDaten, doseNr);
 					break;
 				default:
-					VerbindungEnerGie.schaltzustaendeAusgeben(verbindungsDaten);
+					conEnergie.schaltzustaendeAusgeben(verbindungsDaten);
 					break;
 				}
 			}
 		} else {
-			VerbindungEnerGie.schaltzustaendeAusgeben(verbindungsDaten);
+			conEnergie.schaltzustaendeAusgeben(verbindungsDaten);
 		}
 	}
 
