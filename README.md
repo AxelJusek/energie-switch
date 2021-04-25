@@ -1,5 +1,5 @@
 # energie-switch
-This small project was written out of desperation because i wanted to use a net-controllable power-socket and found no affordable and working solution for.
+This small project was written out of desperation because i wanted to use a net-controllable power-socket and found no affordable and working solution.
 
 ## The product chosen as solution
 After a long search I ended up with this: https://www.energenie.com/item.aspx?id=7416 
