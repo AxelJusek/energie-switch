@@ -416,5 +416,53 @@ public class VerbindungEnerGie {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void zustandAbfragen(Verbindungsdaten verbindungsDaten, String doseNr) throws IOException {
+		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
+		Integer dose = Integer.parseInt(doseNr);
+		SchaltZustand sz = new SchaltZustand(vEnGen);
+
+		System.out.println(sz.getSchaltZustand(dose));
+
+		vEnGen.verbindungTrennen();
+	}
+
+	
+
+	public static void schaltzustaendeAusgeben(Verbindungsdaten verbindungsDaten) throws IOException {
+		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
+
+		SchaltZustand sz = new SchaltZustand(vEnGen);
+
+		System.out.println("Verbindungsdaten zur Energenie LAN Steckdose:");
+		System.out.println(sz.getSchaltZustandAlle());
+
+		vEnGen.verbindungTrennen();
+	}
+
+	public static void doseSchalten(Verbindungsdaten verbindungsDaten, String doseNr, String einschalten) throws IOException {
+		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
+
+		SchaltZustand sz = new SchaltZustand(vEnGen);
+		boolean ein = Boolean.parseBoolean(einschalten);
+		int dose = Integer.parseInt(doseNr);
+		sz.schalten(dose, ein);
+
+		vEnGen.verbindungTrennen();
+	}
+
+	private static VerbindungEnerGie verbindungAufbauen(Verbindungsdaten verbindungsDaten) throws IOException {
+
+		VerbindungEnerGie vEnGen = new VerbindungEnerGie();
+		byte[] key = vEnGen.putPasswordInArray(verbindungsDaten.getPasswd());
+
+		log.info("Es werden die folgenden Parameter verwendet: \n" + "IP-Adresse '" + verbindungsDaten.getIpAddress()
+				+ "'\n" + "Port '" + verbindungsDaten.getPort() + "'\n" + "Passwort '" + verbindungsDaten.getPasswd()
+				+ "'\n" + "Key '" + key.length + "'\n");
+
+		Socket socket = vEnGen.neueTCPVerbindung(verbindungsDaten.getIpAddress(), verbindungsDaten.getPort());
+		vEnGen.anmelden(key, socket);
+		return vEnGen;
+	}
 
 }

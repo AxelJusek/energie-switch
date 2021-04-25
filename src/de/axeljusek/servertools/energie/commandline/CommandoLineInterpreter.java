@@ -38,7 +38,6 @@
 package de.axeljusek.servertools.energie.commandline;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -46,7 +45,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.axeljusek.servertools.energie.communication.Commando;
-import de.axeljusek.servertools.energie.communication.SchaltZustand;
 import de.axeljusek.servertools.energie.communication.VerbindungEnerGie;
 import de.axeljusek.servertools.energie.communication.Verbindungsdaten;
 
@@ -101,70 +99,24 @@ public class CommandoLineInterpreter {
 					break;
 				case SchaltenEinerDoseDosenNr:
 					String einschalten = commando.getFollowParameter();
-					doseSchalten(verbindungsDaten, doseNr, einschalten);
+					VerbindungEnerGie.doseSchalten(verbindungsDaten, doseNr, einschalten);
 					break;
 				case SchaltenEinerDoseGewuenschterZustand:
 					break;
 				case ZustandEinerDoseAbfragen:
-					zustandAbfragen(verbindungsDaten, doseNr);
+					VerbindungEnerGie.zustandAbfragen(verbindungsDaten, doseNr);
 					break;
 				default:
-					schaltzustaendeAusgeben(verbindungsDaten);
+					VerbindungEnerGie.schaltzustaendeAusgeben(verbindungsDaten);
 					break;
 				}
 			}
 		} else {
-			schaltzustaendeAusgeben(verbindungsDaten);
+			VerbindungEnerGie.schaltzustaendeAusgeben(verbindungsDaten);
 		}
 	}
 
-	private void zustandAbfragen(Verbindungsdaten verbindungsDaten, String doseNr) throws IOException {
-		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
-		Integer dose = Integer.parseInt(doseNr);
-		SchaltZustand sz = new SchaltZustand(vEnGen);
 
-		System.out.println(sz.getSchaltZustand(dose));
-
-		vEnGen.verbindungTrennen();
-	}
-
-	
-
-	private void schaltzustaendeAusgeben(Verbindungsdaten verbindungsDaten) throws IOException {
-		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
-
-		SchaltZustand sz = new SchaltZustand(vEnGen);
-
-		System.out.println("Verbindungsdaten zur Energenie LAN Steckdose:");
-		System.out.println(sz.getSchaltZustandAlle());
-
-		vEnGen.verbindungTrennen();
-	}
-
-	private void doseSchalten(Verbindungsdaten verbindungsDaten, String doseNr, String einschalten) throws IOException {
-		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
-
-		SchaltZustand sz = new SchaltZustand(vEnGen);
-		boolean ein = Boolean.parseBoolean(einschalten);
-		int dose = Integer.parseInt(doseNr);
-		sz.schalten(dose, ein);
-
-		vEnGen.verbindungTrennen();
-	}
-
-	protected VerbindungEnerGie verbindungAufbauen(Verbindungsdaten verbindungsDaten) throws IOException {
-
-		VerbindungEnerGie vEnGen = new VerbindungEnerGie();
-		byte[] key = vEnGen.putPasswordInArray(verbindungsDaten.getPasswd());
-
-		log.info("Es werden die folgenden Parameter verwendet: \n" + "IP-Adresse '" + verbindungsDaten.getIpAddress()
-				+ "'\n" + "Port '" + verbindungsDaten.getPort() + "'\n" + "Passwort '" + verbindungsDaten.getPasswd()
-				+ "'\n" + "Key '" + key.length + "'\n");
-
-		Socket socket = vEnGen.neueTCPVerbindung(verbindungsDaten.getIpAddress(), verbindungsDaten.getPort());
-		vEnGen.anmelden(key, socket);
-		return vEnGen;
-	}
 
 	protected SortedSet<Commando> putParametersInCommandoSet(String[] args) {
 
