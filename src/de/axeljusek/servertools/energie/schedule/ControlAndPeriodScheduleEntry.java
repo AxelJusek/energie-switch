@@ -35,22 +35,24 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.schedule;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.axeljusek.servertools.energie.communication.VerbindungEnerGie;
 
 /**
  * @author axel
  *
  */
-public class Schedule {
-	private byte[] timestamp = new byte[4];
-	private List<ScheduleEntry> entries = new ArrayList<>();
-	private byte loopPeriodMarker = (byte) Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray("E5")[0]);
-	private byte[] loopPeriod = new byte[4];
-	private byte socketNr; // Socket-Nummber and Dummy bit - the most significant bit
-	private byte[] checksum = new byte[2];
+public enum ControlAndPeriodScheduleEntry {
+	OnceOn("00"), OnceOff("01"), PeriodicallyOn("02"), PeriodicallyOff("03");
 
-	// TODO Hier weitermachen.
+	private String byteExpression;
+
+	ControlAndPeriodScheduleEntry(String byteExpression) {
+		this.byteExpression = byteExpression;
+	}
+
+	public byte getByte() {
+		return (byte) Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray(this.byteExpression)[0]);
+	}
 }

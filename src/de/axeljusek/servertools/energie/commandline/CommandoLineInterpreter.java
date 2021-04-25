@@ -35,7 +35,7 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.commandline;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -45,6 +45,11 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.axeljusek.servertools.energie.communication.Commando;
+import de.axeljusek.servertools.energie.communication.SchaltZustand;
+import de.axeljusek.servertools.energie.communication.VerbindungEnerGie;
+import de.axeljusek.servertools.energie.communication.Verbindungsdaten;
+
 /**
  * @author axel
  *
@@ -52,8 +57,6 @@ import org.apache.logging.log4j.Logger;
 public class CommandoLineInterpreter {
 
 	static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
-
-	private Konfiguration conf = Konfiguration.getInstance();
 
 	public CommandoLineInterpreter(String[] args) throws IOException {
 		SortedSet<Commando> operationsParameter = null;
@@ -76,7 +79,7 @@ public class CommandoLineInterpreter {
 
 	private void commandoUmsetzen(SortedSet<Commando> commandos) throws IOException {
 		// Die Verbindungsdaten aus den Commandos auspacken
-		Verbindungsdaten verbindungsDaten = getVerbindungsDatenFromCommandos(commandos);
+		Verbindungsdaten verbindungsDaten = Verbindungsdaten.getVerbindungsDatenFromCommandos(commandos);
 
 		if (null != commandos) {
 			for (Commando commando : commandos) {
@@ -125,48 +128,7 @@ public class CommandoLineInterpreter {
 		vEnGen.verbindungTrennen();
 	}
 
-	private Verbindungsdaten getVerbindungsDatenFromCommandos(SortedSet<Commando> commandos) {
-		String ipAddress = null;
-		String port = null;
-		String passwd = null;
-
-		if (null != commandos) {
-			for (Commando commando : commandos) {
-				if (ParameterKommandozeile.IpAdresseAngeben.equals(commando.getType())) {
-					ipAddress = commando.getParameter();
-				} else if (ParameterKommandozeile.PortNrAngeben.equals(commando.getType())) {
-					port = commando.getParameter();
-				} else if (ParameterKommandozeile.PasswordAngeben.equals(commando.getType())) {
-					passwd = commando.getParameter();
-				}
-			}
-		}
-		Verbindungsdaten verbindungsDaten = getVerbindungsDaten(ipAddress, port, passwd);
-		return verbindungsDaten;
-	}
-
-	private Verbindungsdaten getVerbindungsDaten(String ip_address, String port, String passwd) {
-
-		if (null == ip_address) {
-			ip_address = this.conf.getValueForKey("ip_address");
-		}
-
-		if (null == passwd) {
-			passwd = this.conf.getValueForKey("password");
-		}
-		while (8 > passwd.length()) // Ist fest in der Steckdosenleiste
-									// eingebrannt - Passwortlaenge ist 8
-									// Zeichen - rechtsbuendig
-		{
-			passwd = " " + passwd;
-		}
-
-		if (null == port) {
-			port = this.conf.getValueForKey("port");
-		}
-
-		return new Verbindungsdaten(ip_address, port, passwd);
-	}
+	
 
 	private void schaltzustaendeAusgeben(Verbindungsdaten verbindungsDaten) throws IOException {
 		VerbindungEnerGie vEnGen = verbindungAufbauen(verbindungsDaten);
@@ -277,7 +239,7 @@ public class CommandoLineInterpreter {
 	private void hilfetextAusgeben() {
 		System.out.println("Hier k��nnte Ihr Hilfetext stehen \n");
 
-		System.out.println("Diese Software ben��tigt JDK 1.8.0 und aktueller und eine Konfigurationsdatei.\n");
+		System.out.println("Diese Software ben��tigt JDK 11 und aktueller und eine Konfigurationsdatei.\n");
 		System.out.println(
 				"Ist die Konfigurationsdatei nicht vorhanden, so wird sie in dem Home-Verzeichnis des verwendeten Anwenders angelegt. "
 						+ "Die Konfigurationsdatei liegt im Verzeichnis ~/.energenie_switch und wird angelegt aber nicht beschrieben. "

@@ -35,7 +35,7 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;

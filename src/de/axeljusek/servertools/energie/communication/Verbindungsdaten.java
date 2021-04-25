@@ -35,7 +35,12 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.communication;
+
+import java.util.SortedSet;
+
+import de.axeljusek.servertools.energie.commandline.ParameterKommandozeile;
+import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
 /**
  * @author axel
@@ -47,16 +52,58 @@ public class Verbindungsdaten {
 	private String portNr = "";
 	private String password = "";
 	
-	public Verbindungsdaten()
-	{		
-	}
 	
-	public Verbindungsdaten(String ipAddress, String portNr, String password)
+	private Verbindungsdaten(String ipAddress, String portNr, String password)
 	{
 		this.ipAddress= ipAddress;
 		this.portNr = portNr;
 		this.password=password;
 	}
+	
+	private static Verbindungsdaten getVerbindungsDaten(String ip_address, String port, String passwd) {
+		Konfiguration conf = Konfiguration.getInstance();
+		
+		if (null == ip_address) {
+			ip_address = conf.getValueForKey("ip_address");
+		}
+
+		if (null == passwd) {
+			passwd = conf.getValueForKey("password");
+		}
+		while (8 > passwd.length()) // Ist fest in der Steckdosenleiste
+									// eingebrannt - Passwortlaenge ist 8
+									// Zeichen - rechtsbuendig
+		{
+			passwd = " " + passwd;
+		}
+
+		if (null == port) {
+			port = conf.getValueForKey("port");
+		}
+
+		return new Verbindungsdaten(ip_address, port, passwd);
+	}
+	
+	public static Verbindungsdaten getVerbindungsDatenFromCommandos(SortedSet<Commando> commandos) {
+		String ipAddress = null;
+		String port = null;
+		String passwd = null;
+
+		if (null != commandos) {
+			for (Commando commando : commandos) {
+				if (ParameterKommandozeile.IpAdresseAngeben.equals(commando.getType())) {
+					ipAddress = commando.getParameter();
+				} else if (ParameterKommandozeile.PortNrAngeben.equals(commando.getType())) {
+					port = commando.getParameter();
+				} else if (ParameterKommandozeile.PasswordAngeben.equals(commando.getType())) {
+					passwd = commando.getParameter();
+				}
+			}
+		}
+		Verbindungsdaten verbindungsDaten = Verbindungsdaten.getVerbindungsDaten(ipAddress, port, passwd);
+		return verbindungsDaten;
+	}
+
 	
 	public String getIpAddress()
 	{

@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.net.Socket;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
 
-import de.axeljusek.servertools.energie.VerbindungEnerGie;
+import de.axeljusek.servertools.energie.communication.VerbindungEnerGie;
+
+import org.junit.jupiter.api.Disabled;
 
 @Disabled
 public class VerbindungEnerGieTest {

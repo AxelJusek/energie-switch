@@ -35,7 +35,7 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.communication;
 
 
 import org.apache.logging.log4j.LogManager;
@@ -97,19 +97,19 @@ public class SchaltZustand {
 	private byte encryptControlForDose(int dose, int cByte, int k1, int k0, int t3, int t2) {
 		VerbindungEnerGie.log.info("ctrlcryp[i]=(((ctrl[3-i]^task[2])+task[3])^key[0])+key[1]");
 		VerbindungEnerGie.log.info("Mit i="+dose);
-		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=((("+new Integer(cByte).toString()+"^"+new Integer(t2).toString()+")+"+new Integer(t3).toString()+")^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=((("+ Integer.valueOf(cByte).toString()+"^"+ Integer.valueOf(t2).toString()+")+"+ Integer.valueOf(t3).toString()+")^"+ Integer.valueOf(k0).toString()+")+"+ Integer.valueOf(k1).toString()+"");
 		
 		int int1=cByte^t2;
-		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=(("+new Integer(int1).toString()+"+"+new Integer(t3).toString()+")^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=(("+ Integer.valueOf(int1).toString()+"+"+ Integer.valueOf(t3).toString()+")^"+ Integer.valueOf(k0).toString()+")+"+ Integer.valueOf(k1).toString()+"");
 		
 		int int2=int1 +t3;
-		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=("+new Integer(int2).toString()+"^"+new Integer(k0).toString()+")+"+new Integer(k1).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]=("+ Integer.valueOf(int2).toString()+"^"+ Integer.valueOf(k0).toString()+")+"+ Integer.valueOf(k1).toString()+"");
 		
 		int int3=int2^k0;
-		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]="+new Integer(int3).toString()+"+"+new Integer(k1).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]="+ Integer.valueOf(int3).toString()+"+"+ Integer.valueOf(k1).toString()+"");
 		
 		int int4=int3+k1;
-		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]="+new Integer(int4).toString()+"");
+		VerbindungEnerGie.log.info("ctrlcryp["+dose+"]="+ Integer.valueOf(int4).toString()+"");
 		
 		byte result = VerbindungEnerGie.convertIntToHexByteArray(int4)[1];
 		return result;
@@ -140,22 +140,22 @@ public class SchaltZustand {
 		return schaltZustand.getDefaultExpression();
 	}
 
-	protected int berechneStatusWert(int dose, int sc0, int k1, int k0, int t3, int t2) {
+	public int berechneStatusWert(int dose, int sc0, int k1, int k0, int t3, int t2) {
 		log.info("stat[3-i]=(((statcryp[i]-key[1])^key[0])-task[3])^task[2]");
 		log.info("Mit i="+dose);
-		log.info("stat[3-"+dose+"]=((("+new Integer(sc0).toString()+"-"+new Integer(k1).toString()+")^"+new Integer(k0).toString()+")-"+new Integer(t3).toString()+")^"+new Integer(t2).toString()+"");
+		log.info("stat[3-"+dose+"]=((("+ Integer.valueOf(sc0).toString()+"-"+ Integer.valueOf(k1).toString()+")^"+ Integer.valueOf(k0).toString()+")-"+ Integer.valueOf(t3).toString()+")^"+ Integer.valueOf(t2).toString()+"");
 		
 		int int1= sc0 - k1;
-		log.info("stat[3-i]=(("+new Integer(int1).toString()+"^"+new Integer(k0).toString()+")-"+new Integer(t3).toString()+")^"+new Integer(t2).toString()+"");
+		log.info("stat[3-i]=(("+ Integer.valueOf(int1).toString()+"^"+ Integer.valueOf(k0).toString()+")-"+ Integer.valueOf(t3).toString()+")^"+ Integer.valueOf(t2).toString()+"");
 		
 		int int2 = int1^k0;
-		log.info("stat[3-i]=("+new Integer(int2).toString()+"-"+new Integer(t3).toString()+")^"+new Integer(t2).toString()+"");
+		log.info("stat[3-i]=("+ Integer.valueOf(int2).toString()+"-"+ Integer.valueOf(t3).toString()+")^"+ Integer.valueOf(t2).toString()+"");
 		
 		int int3 = int2-t3;
-		log.info("stat[3-i]="+new Integer(int3).toString()+"^"+new Integer(t2).toString()+"");
+		log.info("stat[3-i]="+ Integer.valueOf(int3).toString()+"^"+ Integer.valueOf(t2).toString()+"");
 		
 		int int4 = int3^t2;
-		log.info("stat[3-i]="+new Integer(int4).toString()+"");
+		log.info("stat[3-i]="+ Integer.valueOf(int4).toString()+"");
 		return int4;
 	}
 

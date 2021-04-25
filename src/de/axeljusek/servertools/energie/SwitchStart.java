@@ -39,6 +39,8 @@ package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
 
+import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
+
 /**
  * @author axel
  *
@@ -57,9 +59,7 @@ public class SwitchStart {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-
 		new CommandoLineInterpreter(args);
-
 	}
 
 }

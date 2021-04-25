@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import de.axeljusek.servertools.energie.CommandoLineInterpreter;
+import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
 
 @Disabled
 public class CommandoLineInterpreterTest {

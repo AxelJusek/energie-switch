@@ -35,43 +35,57 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.commandline;
 
-public enum Konfigurationswerte {
-	port("port", "Number", "5", "5000"),
-	ip_address("ip_address", "String", "15", "192.168.0.254"),
-	password("password", "String", "8", "       1");
+public enum ParameterKommandozeile {
+	HilfeAnzeigen("-h", false, null,"", "Zeigt diesen Hilfetext an."),
+	HilfeAnzeigen2("-help", false, null, "", "siehe -h"),
+	SchaltenEinerDoseGewuenschterZustand("-d", true, null, "true | false", "Der gewuenschte Schaltzustand: True steht fuer ein und False fuer aus."),
+	SchaltenEinerDoseDosenNr("-s", true, ParameterKommandozeile.SchaltenEinerDoseGewuenschterZustand, "0 | 1 | 2 | 3", "Die Nummer der Dose die geschaltet werden soll."),
+	IpAdresseAngeben("-ip", true, null, "z.B. 192.168.0.254", "Die IP-Adresse über welche die Steckdosenleiste erreicht wird."),
+	PortNrAngeben("-port", true, null, "z.B. 5000", "Die Port-Nummer auf welche die Steckdosenleiste hört."),
+	ProfileNr("-profile", true, null, "", "Zur Zeit noch nicht realisiert."),
+	ZustandEinerDoseAbfragen("-z", true, null, "-z 0", "Abfragen des Zustands der gegebenen Dose."),
+	PasswordAngeben("-passwd", true, null, "       1", "Das Passwort fuer die Steckdosenleiste.");
 	
-	private final String name;
-	private final String dataType;
-	private final String length;
-	private final String defaultValue;
 	
-	Konfigurationswerte(String name, String dataType, String length, String defaultValue)
+	private String parameter="";
+	private boolean mitWert = false;
+	private String werteListe;
+	private String erlaeuterungstext;
+	private ParameterKommandozeile partnerWert = null;
+	
+	ParameterKommandozeile(String parameter, boolean mitWert, ParameterKommandozeile partnerWert, String werteListe, String erlaeuterungstext)
 	{
-		this.name=name;
-		this.dataType=dataType;
-		this.length=length;
-		this.defaultValue=defaultValue;
+		this.parameter=parameter;
+		this.mitWert = mitWert;
+		this.partnerWert = partnerWert;
+		this.werteListe=werteListe;
+		this.erlaeuterungstext=erlaeuterungstext;
 	}
 	
-	public String getName()
+	public String getParameter()
 	{
-		return this.name;
+		return parameter;
 	}
 	
-	public String getDataType()
+	public boolean mitWert()
 	{
-		return this.dataType;
+		return mitWert;
 	}
 	
-	public String getLength()
+	public String getWerteListe()
 	{
-		return this.length;
+		return werteListe;
 	}
 	
-	public String getDefaultValue()
+	public String getErlaeuterungstext()
 	{
-		return this.defaultValue;
+		return erlaeuterungstext;
+	}
+	
+	public ParameterKommandozeile getPartnerWert()
+	{
+		return this.partnerWert;
 	}
 }

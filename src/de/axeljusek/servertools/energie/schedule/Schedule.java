@@ -35,81 +35,24 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.schedule;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import de.axeljusek.servertools.energie.communication.VerbindungEnerGie;
 
 /**
  * @author axel
  *
  */
-public class Commando implements Comparable<Commando>{
+public class Schedule {
+	private byte[] timestamp = new byte[4];
+	private List<ScheduleEntry> entries = new ArrayList<>();
+	private byte loopPeriodMarker = (byte) Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray("E5")[0]);
+	private byte[] loopPeriod = new byte[4];
+	private byte socketNr; // Socket-Nummber and Dummy bit - the most significant bit
+	private byte[] checksum = new byte[2];
 
-	private Integer index =0;
-	private ParameterKommandozeile type = null;
-	private String parameter = "";
-	private String followParameter = "";
-	
-	
-	public Commando(ParameterKommandozeile type, Integer index)
-	{
-		this.index = index;
-		this.type = type;
-	}
-	
-	public int getIndex()
-	{
-		return this.index;
-	}
-	
-	public ParameterKommandozeile getType()
-	{
-		return this.type;
-	}
-	
-	public String getParameter()
-	{
-		return this.parameter;
-	}
-
-	public String getFollowParameter()
-	{
-		return this.followParameter;
-	}
-	
-	public void setParameter(String parameter)
-	{
-		this.parameter = parameter;
-	}
-	
-	public void setFollowParameter(String parameter)
-	{
-		this.followParameter= parameter;
-	}
-
-	/**
-	 * We do not compare the object with each other, just their index. Therefore we leave the equals and hashCode as they are.
-	 * TODO While we need this only to sort for the execution order, an external Comparator may be the cleaner solution here.
-	 */
-	@Override
-	public int compareTo(Commando o) {
-		int c=0;
-		if(null != o)
-		{
-			if(this.getIndex() > o.getIndex())
-			{
-				c=1;
-			}
-			else
-			{
-				c=-1;
-			}
-		}
-		else
-		{
-			throw new NullPointerException("To be compared object of commando is null.");
-		}
-		return c;
-	}
-	
-	
-	
+	// TODO Hier weitermachen.
 }

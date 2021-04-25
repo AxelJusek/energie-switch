@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-import de.axeljusek.servertools.energie.SchaltZustand;
-import de.axeljusek.servertools.energie.VerbindungEnerGie;
+import de.axeljusek.servertools.energie.communication.SchaltZustand;
+import de.axeljusek.servertools.energie.communication.VerbindungEnerGie;
 
 public class SchaltZustandTest {
 

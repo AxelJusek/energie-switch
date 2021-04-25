@@ -35,57 +35,83 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.communication;
 
-public enum ParameterKommandozeile {
-	HilfeAnzeigen("-h", false, null,"", "Zeigt diesen Hilfetext an."),
-	HilfeAnzeigen2("-help", false, null, "", "siehe -h"),
-	SchaltenEinerDoseGewuenschterZustand("-d", true, null, "true | false", "Der gewuenschte Schaltzustand: True steht fuer ein und False fuer aus."),
-	SchaltenEinerDoseDosenNr("-s", true, ParameterKommandozeile.SchaltenEinerDoseGewuenschterZustand, "0 | 1 | 2 | 3", "Die Nummer der Dose die geschaltet werden soll."),
-	IpAdresseAngeben("-ip", true, null, "z.B. 192.168.0.254", "Die IP-Adresse über welche die Steckdosenleiste erreicht wird."),
-	PortNrAngeben("-port", true, null, "z.B. 5000", "Die Port-Nummer auf welche die Steckdosenleiste hört."),
-	ProfileNr("-profile", true, null, "", "Zur Zeit noch nicht realisiert."),
-	ZustandEinerDoseAbfragen("-z", true, null, "-z 0", "Abfragen des Zustands der gegebenen Dose."),
-	PasswordAngeben("-passwd", true, null, "       1", "Das Passwort fuer die Steckdosenleiste.");
+import de.axeljusek.servertools.energie.commandline.ParameterKommandozeile;
+
+/**
+ * @author axel
+ *
+ */
+public class Commando implements Comparable<Commando>{
+
+	private Integer index =0;
+	private ParameterKommandozeile type = null;
+	private String parameter = "";
+	private String followParameter = "";
 	
 	
-	private String parameter="";
-	private boolean mitWert = false;
-	private String werteListe;
-	private String erlaeuterungstext;
-	private ParameterKommandozeile partnerWert = null;
-	
-	ParameterKommandozeile(String parameter, boolean mitWert, ParameterKommandozeile partnerWert, String werteListe, String erlaeuterungstext)
+	public Commando(ParameterKommandozeile type, Integer index)
 	{
-		this.parameter=parameter;
-		this.mitWert = mitWert;
-		this.partnerWert = partnerWert;
-		this.werteListe=werteListe;
-		this.erlaeuterungstext=erlaeuterungstext;
+		this.index = index;
+		this.type = type;
+	}
+	
+	public int getIndex()
+	{
+		return this.index;
+	}
+	
+	public ParameterKommandozeile getType()
+	{
+		return this.type;
 	}
 	
 	public String getParameter()
 	{
-		return parameter;
+		return this.parameter;
+	}
+
+	public String getFollowParameter()
+	{
+		return this.followParameter;
 	}
 	
-	public boolean mitWert()
+	public void setParameter(String parameter)
 	{
-		return mitWert;
+		this.parameter = parameter;
 	}
 	
-	public String getWerteListe()
+	public void setFollowParameter(String parameter)
 	{
-		return werteListe;
+		this.followParameter= parameter;
+	}
+
+	/**
+	 * We do not compare the object with each other, just their index. Therefore we leave the equals and hashCode as they are.
+	 * TODO While we need this only to sort for the execution order, an external Comparator may be the cleaner solution here.
+	 */
+	@Override
+	public int compareTo(Commando o) {
+		int c=0;
+		if(null != o)
+		{
+			if(this.getIndex() > o.getIndex())
+			{
+				c=1;
+			}
+			else
+			{
+				c=-1;
+			}
+		}
+		else
+		{
+			throw new NullPointerException("To be compared object of commando is null.");
+		}
+		return c;
 	}
 	
-	public String getErlaeuterungstext()
-	{
-		return erlaeuterungstext;
-	}
 	
-	public ParameterKommandozeile getPartnerWert()
-	{
-		return this.partnerWert;
-	}
+	
 }

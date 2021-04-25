@@ -7,7 +7,7 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import de.axeljusek.servertools.energie.Konfiguration;
+import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
 public class KonfigurationTest {
 

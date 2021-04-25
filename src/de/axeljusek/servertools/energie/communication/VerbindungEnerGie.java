@@ -35,7 +35,7 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.communication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -217,7 +217,7 @@ public class VerbindungEnerGie {
 		return istEmpfangen;
 	}
 
-	protected byte[] getSolutionForRequest(byte[] key, byte[] task) {
+	public byte[] getSolutionForRequest(byte[] key, byte[] task) {
 		byte[] res = new byte[4];
 
 		// res[1:0]=((task[0]^key[2])*key[0])^(key[6]|(key[4]<<8))^task[2]
@@ -234,7 +234,7 @@ public class VerbindungEnerGie {
 		return res;
 	}
 
-	protected static byte[] hexStringToByteArray(String s) {
+	public static byte[] hexStringToByteArray(String s) {
 		int len = s.length();
 		byte[] data = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
@@ -252,32 +252,32 @@ public class VerbindungEnerGie {
 		int t2 = Byte.toUnsignedInt(task2);
 
 		log.info("res[1:0]=((task[0]^key[2])*key[0]) ^ (key[6] | (key[4]<<8)) ^ task[2]");
-		log.info("res[1:0]=((" + new Integer(t0).toString() + "^" + new Integer(k2).toString() + ")*"
-				+ new Integer(k0).toString() + ")^(" + new Integer(k6).toString() + " | (" + new Integer(k4).toString()
-				+ "<<8))^" + new Integer(t2).toString() + "");
+		log.info("res[1:0]=((" +  Integer.valueOf(t0).toString() + "^" +  Integer.valueOf(k2).toString() + ")*"
+				+  Integer.valueOf(k0).toString() + ")^(" +  Integer.valueOf(k6).toString() + " | (" +  Integer.valueOf(k4).toString()
+				+ "<<8))^" +  Integer.valueOf(t2).toString() + "");
 
 		int int1 = t0 ^ k2;
-		log.info("res[1:0]=(" + new Integer(int1).toString() + "*" + new Integer(k0).toString() + ")^("
-				+ new Integer(k6).toString() + " | (" + new Integer(k4).toString() + "<<8))^"
-				+ new Integer(t2).toString() + "");
+		log.info("res[1:0]=(" +  Integer.valueOf(int1).toString() + "*" +  Integer.valueOf(k0).toString() + ")^("
+				+  Integer.valueOf(k6).toString() + " | (" +  Integer.valueOf(k4).toString() + "<<8))^"
+				+  Integer.valueOf(t2).toString() + "");
 
 		int int2 = int1 * k0;
-		log.info("res[1:0]=" + new Integer(int2).toString() + "^(" + new Integer(k6).toString() + " | ("
-				+ new Integer(k4).toString() + "<<8))^" + new Integer(t2).toString() + "");
+		log.info("res[1:0]=" +  Integer.valueOf(int2).toString() + "^(" +  Integer.valueOf(k6).toString() + " | ("
+				+  Integer.valueOf(k4).toString() + "<<8))^" +  Integer.valueOf(t2).toString() + "");
 
 		int int3 = k4 << 8;
-		log.info("res[1:0]=" + new Integer(int2).toString() + "^(" + new Integer(k6).toString() + " | "
-				+ new Integer(int3).toString() + ")^" + new Integer(t2).toString() + "");
+		log.info("res[1:0]=" +  Integer.valueOf(int2).toString() + "^(" +  Integer.valueOf(k6).toString() + " | "
+				+  Integer.valueOf(int3).toString() + ")^" +  Integer.valueOf(t2).toString() + "");
 
 		int int4 = k6 | int3;
-		log.info("res[1:0]=" + new Integer(int2).toString() + "^" + new Integer(int4).toString() + "^"
-				+ new Integer(t2).toString() + "");
+		log.info("res[1:0]=" +  Integer.valueOf(int2).toString() + "^" +  Integer.valueOf(int4).toString() + "^"
+				+  Integer.valueOf(t2).toString() + "");
 
 		int int5 = int2 ^ int4;
-		log.info("res[1:0]=" + new Integer(int5).toString() + "^" + new Integer(t2).toString() + "");
+		log.info("res[1:0]=" +  Integer.valueOf(int5).toString() + "^" +  Integer.valueOf(t2).toString() + "");
 
 		int int6 = int5 ^ t2; // res[1:0]
-		log.info("res[1:0]=" + new Integer(int6).toString() + "");
+		log.info("res[1:0]=" +  Integer.valueOf(int6).toString() + "");
 		String hexString = Integer.toHexString(int6);
 		log.info("res[1:0]=" + hexString);
 
@@ -296,7 +296,7 @@ public class VerbindungEnerGie {
 		return hexByteArray;
 	}
 
-	protected byte[] putPasswordInArray(String password) {
+	public byte[] putPasswordInArray(String password) {
 		this.key = new byte[8];
 		if (8 >= password.length()) {
 			while (8 > password.length()) {
@@ -361,7 +361,7 @@ public class VerbindungEnerGie {
 		return this.outStream;
 	}
 
-	protected void schalteDose(int dose, boolean ein) {
+	public void schalteDose(int dose, boolean ein) {
 		SchaltZustand sz = new SchaltZustand(this);
 		sz.schalten(dose, ein);
 	}

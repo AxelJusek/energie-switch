@@ -35,22 +35,68 @@
  *    Copyright 2021 Axel Jusek
  *  
  *******************************************************************************/
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.communication;
 
-/**
- * @author axel
- *
- */
-public enum ControlAndPeriodScheduleEntry {
-	OnceOn("00"), OnceOff("01"), PeriodicallyOn("02"), PeriodicallyOff("03");
+public enum Schaltzustaende {
 
-	private String byteExpression;
-
-	ControlAndPeriodScheduleEntry(String byteExpression) {
-		this.byteExpression = byteExpression;
+	Eingeschaltet(-191, 65, "0x41", "On", "txt_plug_is_on", true),
+	Ausgeschaltet(-126, 130, "0x82", "Off", "txt_plug_is_off", true),
+	Unklar(0, 0, "0xFF", "Dead", "txt_plug_is_unknown", true);
+	
+	private final Integer signedIntID;
+	private final Integer unsignedIntID;
+	private final String hexValue;
+	private final String defaultExpression;
+	private final String textKey;
+	private final Boolean on;
+	
+	Schaltzustaende(Integer signedIntID, Integer unsignedIntID, String hexValue, String defaultExpression, String textKey, Boolean on)
+	{
+		this.signedIntID= signedIntID;
+		this.unsignedIntID = unsignedIntID;
+		this.hexValue = hexValue;
+		this.defaultExpression = defaultExpression;
+		this.textKey = textKey;
+		this.on = on;
 	}
 
-	public byte getByte() {
-		return (byte) Byte.toUnsignedInt(VerbindungEnerGie.hexStringToByteArray(this.byteExpression)[0]);
+	public Integer getSignedIntID() {
+		return signedIntID;
 	}
+
+	public Integer getUnsignedIntID() {
+		return unsignedIntID;
+	}
+
+	public String getHexValue() {
+		return hexValue;
+	}
+
+	public String getDefaultExpression() {
+		return defaultExpression;
+	}
+
+	public String getTextKey() {
+		return textKey;
+	}
+
+	public Boolean getOn() {
+		return on;
+	}
+	
+	public static Schaltzustaende getZustandByInt(Integer id)
+	{
+		Schaltzustaende gesucht = Schaltzustaende.Unklar;
+		if(id.equals(Eingeschaltet.getSignedIntID()) || id.equals(Eingeschaltet.getUnsignedIntID()))
+		{
+			gesucht=Schaltzustaende.Eingeschaltet;
+		}
+		else if(id.equals(Ausgeschaltet.getSignedIntID()) || id.equals(Ausgeschaltet.getUnsignedIntID()))
+		{
+			gesucht=Schaltzustaende.Ausgeschaltet;
+		}
+		
+		return gesucht;
+	}
+	
 }
