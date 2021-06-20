@@ -34,13 +34,9 @@
 package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
-
 import com.google.inject.Guice;
-import com.google.inject.Injector;
-
 import de.axeljusek.servertools.energie.commandline.CommandLineModule;
 import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
-import de.axeljusek.servertools.energie.communication.ConnectionEnergie;
 import de.axeljusek.servertools.energie.communication.ConnectionModule;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
 

@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package de.axeljusek.servertools.energie.commandline;
 
 import com.google.inject.AbstractModule;
