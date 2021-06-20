@@ -1,5 +1,3 @@
-/*******************************************************************************
- *******************************************************************************/
 package de.axeljusek.servertools.energie;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

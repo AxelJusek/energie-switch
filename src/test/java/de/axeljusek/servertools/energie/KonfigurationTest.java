@@ -1,17 +1,15 @@
-/*******************************************************************************
- *******************************************************************************/
 package de.axeljusek.servertools.energie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
 import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
 class KonfigurationTest {
+  private String configFilename = "konfiguration.conf";
 
   @Test
   void testKonfiguration() {
@@ -21,15 +19,13 @@ class KonfigurationTest {
 
   @Test
   void testKonfigurationFile() {
-    File config = new File("konfiguration.conf");
-    Konfiguration conf = new Konfiguration(config);
+    Konfiguration conf =  Konfiguration.getInstanceForConfigFilename(configFilename);
     assertNotNull(conf, "Starten mit Konfig-File.");
-
   }
 
   @Test
   void testGetValueForKey() {
-    Konfiguration conf = Konfiguration.getInstance();
+    Konfiguration conf = Konfiguration.getInstanceForConfigFilename(configFilename);
     assertNotNull(conf, "Default File wurde angelegt.");
 
     String port = conf.getValueForKey("port");

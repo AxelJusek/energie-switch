@@ -35,10 +35,9 @@ package de.axeljusek.servertools.energie.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,12 +45,11 @@ import org.apache.logging.log4j.Logger;
 public class Konfiguration {
 
   private static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
-  private String defaultKonfigurationFile = "konfiguration.conf";
-  private Properties properties;
-  private String konfDir = ".energenie_switch";
-  private String pathToHome = System.getProperty("user.home"); // Nach
-                                                               // https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
-  private String fileSeparator = System.getProperty("file.separator");
+  private static String defaultKonfigurationFile = "konfiguration.conf";
+  private static Properties properties;
+  private static String konfDir = ".energenie_switch";
+  private static String pathToHome = System.getProperty("user.home");
+  private static String fileSeparator = System.getProperty("file.separator");
 
   private static Konfiguration konf;
 
@@ -59,21 +57,32 @@ public class Konfiguration {
   public static Konfiguration getInstance() {
     if (null == konf) {
       konf = new Konfiguration();
+      String standardKonfigFile =
+          pathToHome + fileSeparator + konfDir + fileSeparator + defaultKonfigurationFile;
+      var konfFile = getKonfigurationFile(standardKonfigFile);
+      loadKonfiguration(konfFile);
     }
     return konf;
   }
 
-  private Konfiguration() {
-    var konfFile = getKonfigurationFile();
+  public static Konfiguration getInstanceForConfigFilename(String filename) {
+    if (null == konf) {
+      konf = new Konfiguration();
+    }
+    var url =  konf.getClass().getClassLoader().getResource(filename);
+    var konfFile = getKonfigurationFile(url.getPath());
     loadKonfiguration(konfFile);
+    return konf;
   }
 
-  protected File getKonfigurationFile() {
-    String standardKonfigFile =
-        pathToHome + fileSeparator + konfDir + fileSeparator + defaultKonfigurationFile;
-    File defaultKonfigurationFile = new File(standardKonfigFile);
+  private Konfiguration() {
+    // Intentionally empty, for Singleton-Pattern
+  }
+
+  protected static File getKonfigurationFile(String fileName) {
+    var defaultKonfigurationFile = new File(fileName);
     if (!defaultKonfigurationFile.exists()) {
-      File directoryOfEnergenie = new File(pathToHome + fileSeparator + konfDir);
+      var directoryOfEnergenie = new File(pathToHome + fileSeparator + konfDir);
       if (!directoryOfEnergenie.exists()) {
         directoryOfEnergenie.mkdir();
         log.warn("Verzeichnis fuer die Konfiguration musste angelegt werden:"
@@ -81,9 +90,15 @@ public class Konfiguration {
       }
 
       try {
-        defaultKonfigurationFile.createNewFile();
-        log.warn("Die Standard-Konfigurationsdatei musste angelegt werden:"
-            + defaultKonfigurationFile.getAbsolutePath());
+        boolean created = defaultKonfigurationFile.createNewFile();
+        if (created) {
+          log.warn("Die Standard-Konfigurationsdatei musste angelegt werden:"
+              + defaultKonfigurationFile.getAbsolutePath());
+        } else {
+          log.error(
+              "Es wurde versucht die Standard-Konfigurationsdatei anzulegen, obwohl sie bereit existiert:"
+                  + defaultKonfigurationFile.getAbsolutePath());
+        }
       } catch (IOException e) {
         log.error("Die Datei " + defaultKonfigurationFile.getAbsolutePath()
             + " konnte nicht erstellt werden.");
@@ -93,20 +108,19 @@ public class Konfiguration {
     return defaultKonfigurationFile;
   }
 
-  public Konfiguration(File konfigurationFile) {
-    loadKonfiguration(konfigurationFile);
-  }
-
   public String getValueForKey(String key) {
     return properties.getProperty(key);
   }
 
-  private void loadKonfiguration(File konfFile) {
-
+  private static void loadKonfiguration(File konfFile) {
     if (konfFile.exists()) {
       if (konfFile.isFile()) {
-        FileInputStream inStream = openInputStream(konfFile);
-        loadKonfigurationFromFile(inStream);
+        try (var inStream = new FileInputStream(konfFile);) {
+          loadKonfigurationFromFileToProperties(inStream);
+        } catch (IOException e) {
+          log.error(
+              "Die Datei " + konfFile.getAbsolutePath() + " warf beim Schließen ein Exception", e);
+        }
       } else {
         log.error("Die Datei " + konfFile.getAbsolutePath() + " ist keine Datei");
       }
@@ -117,7 +131,7 @@ public class Konfiguration {
     addMissingProperties();
   }
 
-  private void addMissingProperties() {
+  private static void addMissingProperties() {
     if (null != properties) {
       for (Konfigurationswerte konfW : Konfigurationswerte.values()) {
         if (!properties.containsKey(konfW.getName())) {
@@ -129,30 +143,13 @@ public class Konfiguration {
     }
   }
 
-  private void loadKonfigurationFromFile(FileInputStream inStream) {
-    if (null != inStream) {
-      properties = new Properties();
-
-      try {
-        properties.load(inStream);
-      } catch (IOException e) {
-        log.error("Es gab eine IO-Exception beim Laden der Konfiguration.", e);
-        e.printStackTrace();
-      }
-    } else {
-      log.error("Es wurde null für den InputStream übergeben.");
-    }
-  }
-
-  private FileInputStream openInputStream(File konfFile) {
-    FileInputStream inStream = null;
+  private static void loadKonfigurationFromFileToProperties(FileInputStream inStream) {
+    properties = new Properties();
     try {
-      inStream = new FileInputStream(konfFile);
-    } catch (FileNotFoundException e) {
-      log.error("Die Datei " + konfFile.getAbsolutePath() + " konnte nicht gefunden werden.", e);
-      e.printStackTrace();
+      properties.load(inStream);
+    } catch (IOException e) {
+      log.error("Es gab eine IO-Exception beim Laden der Konfiguration.", e);
     }
-    return inStream;
   }
 
 }

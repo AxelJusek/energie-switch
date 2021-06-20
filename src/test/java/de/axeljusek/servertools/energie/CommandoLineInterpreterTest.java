@@ -1,15 +1,26 @@
-/*******************************************************************************
- *******************************************************************************/
+
 package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
+import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
-//TODO - dieser Test hängt von der Konfig-Datei im User-Home-Verzeichnis ab - FIXME
 class CommandoLineInterpreterTest {
+  private String configFilename = "konfiguration.conf";
+  private String port;
+  private String ip;
+  private String passwd;
+  
+  void prepare() {
+    Konfiguration conf = Konfiguration.getInstanceForConfigFilename(configFilename);
+    port = conf.getValueForKey("port");
+    ip = conf.getValueForKey("ip_address");
+    passwd = conf.getValueForKey("password");
+  }
 
   @Test
   void testCommandoLineInterpreter() throws IOException {
@@ -21,7 +32,7 @@ class CommandoLineInterpreterTest {
   @Test
   void testACLISchaltenEin() throws IOException {
     CommandoLineInterpreter cli = new CommandoLineInterpreter(
-        new String[] {"-s", "3", "-d", "true"}, new VerbindungEnerGie());
+        new String[] {"-ip", ip, "-port", port, "-s", "3", "-d", "true", "-passwd", passwd}, new VerbindungEnerGie());
     assertNotNull(cli, "Schalten der Dose 3 ein");
   }
 
@@ -49,14 +60,14 @@ class CommandoLineInterpreterTest {
   @Test
   void testZCLISchaltenAus() throws IOException {
     CommandoLineInterpreter cli = new CommandoLineInterpreter(
-        new String[] {"-s", "3", "-d", "false"}, new VerbindungEnerGie());
+        new String[] {"-ip", ip, "-port", port, "-s", "3", "-d", "false", "-passwd", passwd}, new VerbindungEnerGie());
     assertNotNull(cli, "Schalten der Dose 3 aus");
   }
 
   @Test
   void testCLIEinzelStatus() throws IOException {
     CommandoLineInterpreter cli =
-        new CommandoLineInterpreter(new String[] {"-z", "3"}, new VerbindungEnerGie());
+        new CommandoLineInterpreter(new String[] {"-ip", ip, "-port", port, "-z", "3", "-passwd", passwd}, new VerbindungEnerGie());
     assertNotNull(cli, "Aufruf des Status fuer Dose 3");
   }
 }

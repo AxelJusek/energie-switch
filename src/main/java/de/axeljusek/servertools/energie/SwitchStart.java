@@ -33,7 +33,6 @@
  *******************************************************************************/
 package de.axeljusek.servertools.energie;
 
-import java.io.IOException;
 import com.google.inject.Guice;
 import de.axeljusek.servertools.energie.commandline.CommandLineModule;
 import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
@@ -48,7 +47,7 @@ public class SwitchStart {
   }
 
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     var injector = Guice.createInjector(new ConnectionModule(),
         new CommandLineModule(args, new VerbindungEnerGie()));
     injector.getInstance(CommandoLineInterpreter.class);
