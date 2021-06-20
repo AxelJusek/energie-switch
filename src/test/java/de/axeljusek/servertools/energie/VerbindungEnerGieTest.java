@@ -4,15 +4,26 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.io.IOException;
 import java.net.Socket;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
+import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
-
+@Disabled // This test requires a real switch to be present.
 class VerbindungEnerGieTest {
-
-  private String ipAddress = "192.168.178.111";
-  private String port = "5000";
-  private String password = "       1";
+  private static String configFilename = "konfiguration.conf";
+  private static String ipAddress = "192.168.178.111";
+  private static String port = "5000";
+  private static String password = "       1";
+  
+  @BeforeAll
+  private static void prepare() {
+    Konfiguration conf = Konfiguration.getInstanceForConfigFilename(configFilename);
+    port = conf.getValueForKey("port");
+    ipAddress = conf.getValueForKey("ip_address");
+    password = conf.getValueForKey("password");
+  }
 
   @Test
   void testVerbindungEnerGenie() {

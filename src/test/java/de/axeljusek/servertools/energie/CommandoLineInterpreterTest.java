@@ -2,20 +2,23 @@
 package de.axeljusek.servertools.energie;
 
 import java.io.IOException;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
 import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
+@Disabled // This test requires a real switch to be present.
 class CommandoLineInterpreterTest {
-  private String configFilename = "konfiguration.conf";
-  private String port;
-  private String ip;
-  private String passwd;
+  private static String configFilename = "konfiguration.conf";
+  private static String port;
+  private static String ip;
+  private static String passwd;
   
-  void prepare() {
+  @BeforeAll
+  private static void prepare() {
     Konfiguration conf = Konfiguration.getInstanceForConfigFilename(configFilename);
     port = conf.getValueForKey("port");
     ip = conf.getValueForKey("ip_address");
@@ -67,7 +70,8 @@ class CommandoLineInterpreterTest {
   @Test
   void testCLIEinzelStatus() throws IOException {
     CommandoLineInterpreter cli =
-        new CommandoLineInterpreter(new String[] {"-ip", ip, "-port", port, "-z", "3", "-passwd", passwd}, new VerbindungEnerGie());
+        new CommandoLineInterpreter(
+            new String[] {"-ip", ip, "-port", port, "-z", "3", "-passwd", passwd}, new VerbindungEnerGie());
     assertNotNull(cli, "Aufruf des Status fuer Dose 3");
   }
 }
