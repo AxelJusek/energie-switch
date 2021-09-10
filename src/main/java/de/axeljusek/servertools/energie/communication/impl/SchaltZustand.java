@@ -33,18 +33,12 @@
  *******************************************************************************/
 package de.axeljusek.servertools.energie.communication.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-
-/**
- * @author axel
- *
- */
 public class SchaltZustand {
 
-  static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
+  static Logger log = LoggerFactory.getLogger(SchaltZustand.class);
 
   private byte[] key;
   private byte[] task;

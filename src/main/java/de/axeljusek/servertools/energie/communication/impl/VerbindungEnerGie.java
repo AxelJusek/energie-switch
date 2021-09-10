@@ -39,14 +39,13 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Date;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import de.axeljusek.servertools.energie.communication.ConnectionEnergie;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VerbindungEnerGie implements ConnectionEnergie {
 
-  static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
+  static Logger log = LoggerFactory.getLogger(VerbindungEnerGie.class);
   private Socket socket;
   private InputStream inStream;
   private OutputStream outStream;

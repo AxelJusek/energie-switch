@@ -39,18 +39,17 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import de.axeljusek.servertools.energie.communication.ConnectionEnergie;
 import de.axeljusek.servertools.energie.communication.impl.Commando;
 import de.axeljusek.servertools.energie.communication.impl.Verbindungsdaten;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommandoLineInterpreter {
 
   private ConnectionEnergie conEnergie;
 
-  static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
+  static Logger log = LoggerFactory.getLogger(CommandoLineInterpreter.class);
 
   @Inject
   public CommandoLineInterpreter(String[] args, ConnectionEnergie conEnergie) {
@@ -60,7 +59,7 @@ public class CommandoLineInterpreter {
     try {
       commandoUmsetzen(operationsParameter);
     } catch (IOException e) {
-      log.error(e);
+      log.error("Access to the operations parameters failed.", e);
     }
   }
 

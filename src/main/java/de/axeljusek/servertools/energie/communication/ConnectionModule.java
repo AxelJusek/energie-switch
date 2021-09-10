@@ -1,5 +1,3 @@
-/*******************************************************************************
- *******************************************************************************/
 package de.axeljusek.servertools.energie.communication;
 
 import com.google.inject.AbstractModule;

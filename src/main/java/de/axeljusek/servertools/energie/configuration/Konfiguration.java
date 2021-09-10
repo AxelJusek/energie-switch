@@ -37,16 +37,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Konfiguration {
-
-  private static Logger log = LogManager.getLogger("de.axeljusek.servertools.energenie");
+  private static Logger log = LoggerFactory.getLogger(Konfiguration.class);
   private static String defaultKonfigurationFile = "konfiguration.conf";
   private static Properties properties;
-  private static String konfDir = ".energenie_switch";
+  private static String konfDir = ".energie_switch";
   private static String pathToHome = System.getProperty("user.home");
   private static String fileSeparator = System.getProperty("file.separator");
 

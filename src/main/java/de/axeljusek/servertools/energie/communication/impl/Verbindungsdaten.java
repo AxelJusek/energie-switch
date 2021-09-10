@@ -38,10 +38,6 @@ import java.util.SortedSet;
 import de.axeljusek.servertools.energie.commandline.ParameterKommandozeile;
 import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
-/**
- * @author axel
- *
- */
 public class Verbindungsdaten {
 
   private String ipAddress = "";
