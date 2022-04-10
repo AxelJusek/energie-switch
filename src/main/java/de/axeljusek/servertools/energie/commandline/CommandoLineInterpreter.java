@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.inject.Inject;
+
 
 import de.axeljusek.servertools.energie.communication.ConnectionEnergie;
 import de.axeljusek.servertools.energie.communication.impl.Commando;
@@ -51,7 +51,6 @@ public class CommandoLineInterpreter {
 
   static Logger log = LoggerFactory.getLogger(CommandoLineInterpreter.class);
 
-  @Inject
   public CommandoLineInterpreter(String[] args, ConnectionEnergie conEnergie) {
     this.conEnergie = conEnergie;
     SortedSet<Commando> operationsParameter = parameterAuswerten(args);

@@ -40,7 +40,7 @@ import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
  *
  */
 public enum ControlAndPeriodScheduleEntry {
-  OnceOn("00"), OnceOff("01"), PeriodicallyOn("02"), PeriodicallyOff("03");
+  ONCE_ON("00"), ONCE_OFF("01"), PERIODICALLY_ON("02"), PERIODICALLY_OFF("03");
 
   private String byteExpression;
 

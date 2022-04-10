@@ -48,6 +48,21 @@ public class Konfiguration {
   private static String pathToHome = System.getProperty("user.home");
   private static String fileSeparator = System.getProperty("file.separator");
 
+  private static final String ATTEMPT_TO_CREATE_DEFAULT_CONFIG_CONFLICT =
+      "Es wurde versucht die Standard-Konfigurationsdatei anzulegen, obwohl sie bereit existiert: {}";
+  private static final String THE_CONFIG_FILE_WAS_CREATED =
+      "The default configuration needed to be created: {}";
+  private static final String THE_FILE_COULDNOT_BE_CREATED = "The file {} couldn't be created. ";
+  private static final String THE_FILE_DOES_NOT_EXIST = "The file {} does NOT exist. ";
+  private static final String THE_FILE_NOT_A_FILE = "The file {} is not a file. ";
+  private static final String THE_FILE_EXCEPTION = "The file {} throw an Exception: ";
+  private static final String THE_DIRECTORY_NEEDED_TO_BE_CREATED =
+      "The directory for the configuration needed to be created: {}";
+  private static final String PROPERTIES_OBJECT_NULL =
+      "The properties-object is null, please delete the software!";
+  private static final String IO_EXCEPTION_AT_LOADING =
+      "Es gab eine IO-Exception beim Laden der Konfiguration.";
+
   private static Konfiguration konf;
 
 
@@ -66,7 +81,7 @@ public class Konfiguration {
     if (null == konf) {
       konf = new Konfiguration();
     }
-    var url =  konf.getClass().getClassLoader().getResource(filename);
+    var url = konf.getClass().getClassLoader().getResource(filename);
     var konfFile = getKonfigurationFile(url.getPath());
     loadKonfiguration(konfFile);
     return konf;
@@ -82,23 +97,19 @@ public class Konfiguration {
       var directoryOfEnergenie = new File(pathToHome + fileSeparator + konfDir);
       if (!directoryOfEnergenie.exists()) {
         directoryOfEnergenie.mkdir();
-        log.warn("Verzeichnis fuer die Konfiguration musste angelegt werden:"
-            + directoryOfEnergenie.getAbsolutePath());
+        log.warn(THE_DIRECTORY_NEEDED_TO_BE_CREATED, directoryOfEnergenie.getAbsolutePath());
       }
 
       try {
         boolean created = defaultKonfigurationFile.createNewFile();
         if (created) {
-          log.warn("Die Standard-Konfigurationsdatei musste angelegt werden:"
-              + defaultKonfigurationFile.getAbsolutePath());
+          log.warn(THE_CONFIG_FILE_WAS_CREATED, defaultKonfigurationFile.getAbsolutePath());
         } else {
-          log.error(
-              "Es wurde versucht die Standard-Konfigurationsdatei anzulegen, obwohl sie bereit existiert:"
-                  + defaultKonfigurationFile.getAbsolutePath());
+          log.error(ATTEMPT_TO_CREATE_DEFAULT_CONFIG_CONFLICT,
+              defaultKonfigurationFile.getAbsolutePath());
         }
       } catch (IOException e) {
-        log.error("Die Datei " + defaultKonfigurationFile.getAbsolutePath()
-            + " konnte nicht erstellt werden.");
+        log.error(THE_FILE_COULDNOT_BE_CREATED, defaultKonfigurationFile.getAbsolutePath());
         e.printStackTrace();
       }
     }
@@ -115,14 +126,13 @@ public class Konfiguration {
         try (var inStream = new FileInputStream(konfFile);) {
           loadKonfigurationFromFileToProperties(inStream);
         } catch (IOException e) {
-          log.error(
-              "Die Datei " + konfFile.getAbsolutePath() + " warf beim Schließen ein Exception", e);
+          log.error(THE_FILE_EXCEPTION, konfFile.getAbsolutePath(), e);
         }
       } else {
-        log.error("Die Datei " + konfFile.getAbsolutePath() + " ist keine Datei");
+        log.error(THE_FILE_NOT_A_FILE, konfFile.getAbsolutePath());
       }
     } else {
-      log.error("Die Datei " + konfFile.getAbsolutePath() + " gibt es nicht.");
+      log.error(THE_FILE_DOES_NOT_EXIST, konfFile.getAbsolutePath());
     }
 
     addMissingProperties();
@@ -136,7 +146,7 @@ public class Konfiguration {
         }
       }
     } else {
-      log.error("Das Properties-Objekt ist null. Bitte die Software löschen!");
+      log.error(PROPERTIES_OBJECT_NULL);
     }
   }
 
@@ -145,7 +155,7 @@ public class Konfiguration {
     try {
       properties.load(inStream);
     } catch (IOException e) {
-      log.error("Es gab eine IO-Exception beim Laden der Konfiguration.", e);
+      log.error(IO_EXCEPTION_AT_LOADING, e);
     }
   }
 

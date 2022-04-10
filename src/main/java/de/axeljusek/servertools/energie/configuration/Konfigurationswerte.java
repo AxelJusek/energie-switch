@@ -34,9 +34,9 @@
 package de.axeljusek.servertools.energie.configuration;
 
 public enum Konfigurationswerte {
-  port("port", "Number", "5", "5000"), 
-  ip_address("ip_address", "String", "15", "192.168.0.254"), 
-  password("password", "String", "8", "       1");
+  PORT("port", "Number", "5", "5000"), 
+  IP_ADDRESS("ip_address", "String", "15", "192.168.0.254"), 
+  PASSWORD("password", "String", "8", "       1");
 
   private final String name;
   private final String dataType;
