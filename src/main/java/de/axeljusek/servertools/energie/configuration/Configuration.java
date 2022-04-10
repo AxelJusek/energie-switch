@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License along with EnergieSwitch. If
- * not, see <http://www.gnu.org/licenses/>.
+ * not, see <https://www.gnu.org/licenses/>.
  * 
  * Diese Datei ist Teil von EnergieSwitch.
  * 
@@ -28,9 +28,10 @@
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten
  * haben. Wenn nicht, siehe <https://www.gnu.org/licenses/>.
  * 
- * Copyright 2021 Axel Jusek
+ * Copyright 2021, 2022 Axel Jusek
  * 
  *******************************************************************************/
+
 package de.axeljusek.servertools.energie.configuration;
 
 import java.io.File;
@@ -40,8 +41,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Konfiguration {
-  private static Logger log = LoggerFactory.getLogger(Konfiguration.class);
+public class Configuration {
+  private static Logger log = LoggerFactory.getLogger(Configuration.class);
   private static String defaultKonfigurationFile = "konfiguration.conf";
   private static Properties properties;
   private static String konfDir = ".energie_switch";
@@ -49,7 +50,7 @@ public class Konfiguration {
   private static String fileSeparator = System.getProperty("file.separator");
 
   private static final String ATTEMPT_TO_CREATE_DEFAULT_CONFIG_CONFLICT =
-      "Es wurde versucht die Standard-Konfigurationsdatei anzulegen, obwohl sie bereit existiert: {}";
+      "Attempt to create the default configuration, while the file already exists: {}";
   private static final String THE_CONFIG_FILE_WAS_CREATED =
       "The default configuration needed to be created: {}";
   private static final String THE_FILE_COULDNOT_BE_CREATED = "The file {} couldn't be created. ";
@@ -63,37 +64,50 @@ public class Konfiguration {
   private static final String IO_EXCEPTION_AT_LOADING =
       "Es gab eine IO-Exception beim Laden der Konfiguration.";
 
-  private static Konfiguration konf;
+  private static Configuration konf;
 
 
-  public static Konfiguration getInstance() {
+  public static Configuration getInstance() {
     if (null == konf) {
-      konf = new Konfiguration();
+      konf = new Configuration();
       String standardKonfigFile =
           pathToHome + fileSeparator + konfDir + fileSeparator + defaultKonfigurationFile;
-      var konfFile = getKonfigurationFile(standardKonfigFile);
-      loadKonfiguration(konfFile);
+      var konfFile = getConfigurationFile(standardKonfigFile);
+      loadConfiguration(konfFile);
     }
     return konf;
   }
 
-  public static Konfiguration getInstanceForConfigFilename(String filename) {
+  public static Configuration getInstanceForConfigFilename(String filename) {
     if (null == konf) {
-      konf = new Konfiguration();
+      konf = new Configuration();
     }
+    File konfFile;
+    
     var url = konf.getClass().getClassLoader().getResource(filename);
-    var konfFile = getKonfigurationFile(url.getPath());
-    loadKonfiguration(konfFile);
+    if (null == url) {
+      konfFile = getConfigurationFile(filename);
+    } else {
+      konfFile = getConfigurationFile(url.getPath());
+    }
+    loadConfiguration(konfFile);
     return konf;
   }
 
-  private Konfiguration() {
+  /**
+   * This method is only for testing purposes, do NOT use ever!
+   */
+  protected void clearConf() {
+    Configuration.konf = null;
+  }
+
+  private Configuration() {
     // Intentionally empty, for Singleton-Pattern
   }
 
-  protected static File getKonfigurationFile(String fileName) {
-    var defaultKonfigurationFile = new File(fileName);
-    if (!defaultKonfigurationFile.exists()) {
+  protected static File getConfigurationFile(String fileName) {
+    var defaultConfigurationFile = new File(fileName);
+    if (!defaultConfigurationFile.exists()) {
       var directoryOfEnergenie = new File(pathToHome + fileSeparator + konfDir);
       if (!directoryOfEnergenie.exists()) {
         directoryOfEnergenie.mkdir();
@@ -101,30 +115,30 @@ public class Konfiguration {
       }
 
       try {
-        boolean created = defaultKonfigurationFile.createNewFile();
+        boolean created = defaultConfigurationFile.createNewFile();
         if (created) {
-          log.warn(THE_CONFIG_FILE_WAS_CREATED, defaultKonfigurationFile.getAbsolutePath());
+          log.warn(THE_CONFIG_FILE_WAS_CREATED, defaultConfigurationFile.getAbsolutePath());
         } else {
           log.error(ATTEMPT_TO_CREATE_DEFAULT_CONFIG_CONFLICT,
-              defaultKonfigurationFile.getAbsolutePath());
+              defaultConfigurationFile.getAbsolutePath());
         }
       } catch (IOException e) {
-        log.error(THE_FILE_COULDNOT_BE_CREATED, defaultKonfigurationFile.getAbsolutePath());
+        log.error(THE_FILE_COULDNOT_BE_CREATED, defaultConfigurationFile.getAbsolutePath());
         e.printStackTrace();
       }
     }
-    return defaultKonfigurationFile;
+    return defaultConfigurationFile;
   }
 
   public String getValueForKey(String key) {
     return properties.getProperty(key);
   }
 
-  private static void loadKonfiguration(File konfFile) {
+  private static void loadConfiguration(File konfFile) {
     if (konfFile.exists()) {
       if (konfFile.isFile()) {
         try (var inStream = new FileInputStream(konfFile);) {
-          loadKonfigurationFromFileToProperties(inStream);
+          loadConfigurationFromFileToProperties(inStream);
         } catch (IOException e) {
           log.error(THE_FILE_EXCEPTION, konfFile.getAbsolutePath(), e);
         }
@@ -140,7 +154,7 @@ public class Konfiguration {
 
   private static void addMissingProperties() {
     if (null != properties) {
-      for (Konfigurationswerte konfW : Konfigurationswerte.values()) {
+      for (Configurationsvalues konfW : Configurationsvalues.values()) {
         if (!properties.containsKey(konfW.getName())) {
           properties.put(konfW.getName(), konfW.getDefaultValue());
         }
@@ -150,7 +164,7 @@ public class Konfiguration {
     }
   }
 
-  private static void loadKonfigurationFromFileToProperties(FileInputStream inStream) {
+  private static void loadConfigurationFromFileToProperties(FileInputStream inStream) {
     properties = new Properties();
     try {
       properties.load(inStream);

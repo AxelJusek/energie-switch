@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
-import de.axeljusek.servertools.energie.configuration.Konfiguration;
+import de.axeljusek.servertools.energie.configuration.Configuration;
 
 @Disabled // This test requires a real switch to be present.
 class VerbindungEnerGieTest {
@@ -19,7 +19,7 @@ class VerbindungEnerGieTest {
   
   @BeforeAll
   private static void prepare() {
-    Konfiguration conf = Konfiguration.getInstanceForConfigFilename(configFilename);
+    Configuration conf = Configuration.getInstanceForConfigFilename(configFilename);
     port = conf.getValueForKey("port");
     ipAddress = conf.getValueForKey("ip_address");
     password = conf.getValueForKey("password");

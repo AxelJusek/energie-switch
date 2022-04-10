@@ -36,7 +36,7 @@ package de.axeljusek.servertools.energie.communication.impl;
 import java.util.SortedSet;
 
 import de.axeljusek.servertools.energie.commandline.ParameterKommandozeile;
-import de.axeljusek.servertools.energie.configuration.Konfiguration;
+import de.axeljusek.servertools.energie.configuration.Configuration;
 
 public class Verbindungsdaten {
 
@@ -53,7 +53,7 @@ public class Verbindungsdaten {
 
   private static Verbindungsdaten getVerbindungsDaten(String ip_address, String port,
       String passwd) {
-    Konfiguration conf = Konfiguration.getInstance();
+    Configuration conf = Configuration.getInstance();
 
     if (null == ip_address) {
       ip_address = conf.getValueForKey("ip_address");

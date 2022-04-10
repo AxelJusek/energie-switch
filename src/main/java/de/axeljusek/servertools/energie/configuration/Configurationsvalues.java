@@ -28,12 +28,13 @@
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten
  * haben. Wenn nicht, siehe <https://www.gnu.org/licenses/>.
  * 
- * Copyright 2021 Axel Jusek
+ * Copyright 2021, 2022 Axel Jusek
  * 
  *******************************************************************************/
+
 package de.axeljusek.servertools.energie.configuration;
 
-public enum Konfigurationswerte {
+public enum Configurationsvalues {
   PORT("port", "Number", "5", "5000"), 
   IP_ADDRESS("ip_address", "String", "15", "192.168.0.254"), 
   PASSWORD("password", "String", "8", "       1");
@@ -43,7 +44,7 @@ public enum Konfigurationswerte {
   private final String length;
   private final String defaultValue;
 
-  Konfigurationswerte(String name, String dataType, String length, String defaultValue) {
+  Configurationsvalues(String name, String dataType, String length, String defaultValue) {
     this.name = name;
     this.dataType = dataType;
     this.length = length;

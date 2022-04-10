@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
-import de.axeljusek.servertools.energie.configuration.Konfiguration;
+import de.axeljusek.servertools.energie.configuration.Configuration;
 
 @Disabled // This test requires a real switch to be present.
 class CommandoLineInterpreterTest {
@@ -19,7 +19,7 @@ class CommandoLineInterpreterTest {
   
   @BeforeAll
   private static void prepare() {
-    Konfiguration conf = Konfiguration.getInstanceForConfigFilename(configFilename);
+    Configuration conf = Configuration.getInstanceForConfigFilename(configFilename);
     port = conf.getValueForKey("port");
     ip = conf.getValueForKey("ip_address");
     passwd = conf.getValueForKey("password");
