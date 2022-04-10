@@ -13,7 +13,7 @@ This project lay dormant for a while and was hosted only on my private systems. 
 Many thanks to Vitaly Sinilin. The project https://github.com/unterwulf/egctl gave me some valuable hints on how to implement the access to the switch. You may take a look at this if you are looking for a C-Implementation. 
 
 # Disclaimer
-This is not productive code! Do not use this for any purpose but for educational purposes. This code is available under the license of GPLv3 of the FSF.
+This is not productive code! Do not use this for any purpose but for educational purposes. This code is available under the license of GPLv3 of the FSF, see:  https://www.gnu.org/licenses/gpl-3.0.html.en.
 
 THERE IS NO WARRANTY!
 
