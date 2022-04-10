@@ -2,7 +2,7 @@ package de.axeljusek.servertools.energie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import de.axeljusek.servertools.energie.communication.impl.SchaltZustand;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;

@@ -1,4 +1,4 @@
-package de.axeljusek.servertools.energie;
+package de.axeljusek.servertools.energie.configuration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
-class KonfigurationTest {
+class KonfigurationTest_OLD {
   private String configFilename = "konfiguration.conf";
 
   @Test

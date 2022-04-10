@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
 import de.axeljusek.servertools.energie.configuration.Konfiguration;
 
-//@Disabled // This test requires a real switch to be present.
+@Disabled // This test requires a real switch to be present.
 class VerbindungEnerGieTest {
   private static String configFilename = "konfiguration.conf";
   private static String ipAddress = "192.168.178.111";
