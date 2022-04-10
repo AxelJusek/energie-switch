@@ -1,6 +1,7 @@
 package de.axeljusek.servertools.energie.configuration;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
 import org.junit.jupiter.api.Test;
 
 class KonfigurationTest {
@@ -20,7 +21,11 @@ class KonfigurationTest {
 
   @Test
   void testGetKonfigurationFile() {
-    fail("Not yet implemented");
+    Konfiguration conf = Konfiguration.getInstanceForConfigFilename(configFilename);
+    assertNotNull(conf, "Default File wurde angelegt.");
+  
+    File configfile = Konfiguration.getKonfigurationFile(configFilename);
+    assertEquals(configFilename, configfile.getName());
   }
 
   @Test
