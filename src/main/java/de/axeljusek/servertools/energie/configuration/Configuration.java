@@ -44,8 +44,8 @@ import org.slf4j.LoggerFactory;
 public class Configuration {
   private static Logger log = LoggerFactory.getLogger(Configuration.class);
   private static String defaultConfigurationFile = "konfiguration.conf";
-  private static Properties properties;
-  private static String confDir = ".energie_switch";
+  private Properties properties;
+  private static String confDir = "energie_switch";
   private static String pathToHome = System.getProperty("user.home");
   private static String fileSeparator = System.getProperty("file.separator");
 
@@ -54,27 +54,33 @@ public class Configuration {
   public static Configuration getInstance() {
     if (null == configuration) {
       configuration = new Configuration();
-      String standardKonfigFile =
-          pathToHome + fileSeparator + confDir + fileSeparator + defaultConfigurationFile;
-      var confFile = getConfigurationFile(standardKonfigFile);
-      loadConfiguration(confFile);
+      var confFile = getConfigurationFile(pathToHome + fileSeparator + confDir + fileSeparator,
+          defaultConfigurationFile);
+      configuration.properties = configuration.loadConfiguration(confFile);
+      log.info(ConfigurationLoggingTexts.STARTING_WITH_CONFIG.getText(), confFile.getAbsolutePath());
     }
+    
     return configuration;
   }
 
-  public static Configuration getInstanceForConfigFilename(String filename) {
+  public static Configuration getInstanceForConfigFilename(String filenameWithFullPath) {
     if (null == configuration) {
       configuration = new Configuration();
     }
     File confFile;
+    int indexOfFilenameStart = filenameWithFullPath.lastIndexOf(fileSeparator) > -1
+        ? filenameWithFullPath.lastIndexOf(fileSeparator)
+        : 0;
+    String filename =
+        filenameWithFullPath.substring(indexOfFilenameStart);
 
-    var url = configuration.getClass().getClassLoader().getResource(filename);
+    var url = configuration.getClass().getClassLoader().getResource(filenameWithFullPath);
     if (null == url) {
-      confFile = getConfigurationFile(filename);
+      confFile = getConfigurationFile(getPathFromFilename(filenameWithFullPath), filename);
     } else {
-      confFile = getConfigurationFile(url.getPath());
+      confFile = getConfigurationFile(url.getPath(), filename);
     }
-    loadConfiguration(confFile);
+    configuration.properties = configuration.loadConfiguration(confFile);
     return configuration;
   }
 
@@ -89,12 +95,12 @@ public class Configuration {
     // Intentionally empty, for Singleton-Pattern
   }
 
-  protected static File getConfigurationFile(String fileName) {
-    var defaultConfigurationFile = new File(fileName);
+  protected static File getConfigurationFile(String configurationDir, String fileName) {
+    var defaultConfigurationFile = new File(configurationDir + fileName);
     if (!defaultConfigurationFile.exists()) {
-      var directoryOfEnergenie = new File(pathToHome + fileSeparator + confDir);
+      var directoryOfEnergenie = new File(configurationDir);
       if (!directoryOfEnergenie.exists()) {
-        directoryOfEnergenie.mkdir();
+        directoryOfEnergenie.mkdirs();
         log.warn(ConfigurationLoggingTexts.THE_DIRECTORY_NEEDED_TO_BE_CREATED.getText(),
             directoryOfEnergenie.getAbsolutePath());
       }
@@ -121,11 +127,12 @@ public class Configuration {
     return properties.getProperty(key);
   }
 
-  private static void loadConfiguration(File configurationFile) {
+  private Properties loadConfiguration(File configurationFile) {
+    Properties properties = new Properties();;
     if (configurationFile.exists()) {
       if (configurationFile.isFile()) {
         try (var inStream = new FileInputStream(configurationFile);) {
-          loadConfigurationFromFileIntoProperties(inStream);
+          properties = loadConfigurationFromFileIntoProperties(inStream);
         } catch (IOException e) {
           log.error(ConfigurationLoggingTexts.THE_FILE_EXCEPTION.getText(),
               configurationFile.getAbsolutePath(), e);
@@ -139,10 +146,12 @@ public class Configuration {
           configurationFile.getAbsolutePath());
     }
 
-    addMissingProperties();
+    addMissingProperties(properties);
+    
+    return properties;
   }
 
-  private static void addMissingProperties() {
+  private static void addMissingProperties(Properties properties) {
     if (null != properties) {
       for (Configurationsvalues configurationValues : Configurationsvalues.values()) {
         if (!properties.containsKey(configurationValues.getName())) {
@@ -154,13 +163,22 @@ public class Configuration {
     }
   }
 
-  private static void loadConfigurationFromFileIntoProperties(FileInputStream inStream) {
-    properties = new Properties();
+  private static Properties loadConfigurationFromFileIntoProperties(FileInputStream inStream) {
+    Properties properties = new Properties();
     try {
       properties.load(inStream);
     } catch (IOException e) {
       log.error(ConfigurationLoggingTexts.IO_EXCEPTION_AT_LOADING.getText(), e);
     }
+    return properties;
+  }
+
+  private static String getPathFromFilename(String filenameWithPath) {
+    String path = "";
+    if (filenameWithPath.contains(fileSeparator)) {
+      path = filenameWithPath.substring(0, filenameWithPath.lastIndexOf(fileSeparator));
+    }
+    return path;
   }
 
 }

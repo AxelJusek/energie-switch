@@ -29,21 +29,33 @@ class ConfigurationTest {
     
     String uniqueFilename = configFilename + UUID.randomUUID().toString();    
     Configuration conf3 = Configuration.getInstanceForConfigFilename(uniqueFilename);
-    assertNotNull(conf3, "Starten mit Unique-File.");
-    
-    
+    assertNotNull(conf3, "Starten mit Unique-File.");  
   }
 
   @Test
-  void testGetKonfigurationFile() {
+  void testGetConfigurationFile() {
     Configuration conf2 = Configuration.getInstance();
     conf2.clearConf();
     Configuration conf = Configuration.getInstanceForConfigFilename(configFilename);
     assertNotNull(conf, "Default File wurde angelegt.");
   
-    File configfile = Configuration.getConfigurationFile(configFilename);
+    File configfile = Configuration.getConfigurationFile("", configFilename);
     assertEquals(configFilename, configfile.getName());
   }
+  
+  @Test
+  void testGetConfigurationFileForNewDirectory() {
+    Configuration conf2 = Configuration.getInstance();
+    conf2.clearConf();
+    String newDirConffile = "testfiles/";
+    String newConfFile = "configurationFile.conf";
+    Configuration conf = Configuration.getInstanceForConfigFilename(newDirConffile+newConfFile);
+    assertNotNull(conf, "File wurde angelegt.");
+  
+    File configfile = Configuration.getConfigurationFile(newDirConffile, newConfFile);
+    assertEquals(newConfFile, configfile.getName());
+  }
+
 
   @Test
   void testGetValueForKey() {
@@ -56,7 +68,7 @@ class ConfigurationTest {
     assertEquals("5000", port, "Prüfen ob der Wert auch stimmt.");
 
     String ip = conf.getValueForKey("ip_address");
-    assertEquals("192.168.178.111", ip, "Prüfen ob die IP stimmt.");
+    assertEquals("192.168.0.254", ip, "Prüfen ob die IP stimmt.");
   }
 
 }

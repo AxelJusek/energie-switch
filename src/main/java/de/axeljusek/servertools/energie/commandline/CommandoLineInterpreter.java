@@ -28,7 +28,7 @@
  * Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten
  * haben. Wenn nicht, siehe <https://www.gnu.org/licenses/>.
  * 
- * Copyright 2021 Axel Jusek
+ * Copyright 2021-2022 Axel Jusek
  * 
  *******************************************************************************/
 package de.axeljusek.servertools.energie.commandline;

@@ -35,6 +35,7 @@ package de.axeljusek.servertools.energie;
 
 import de.axeljusek.servertools.energie.commandline.CommandoLineInterpreter;
 import de.axeljusek.servertools.energie.communication.impl.VerbindungEnerGie;
+import de.axeljusek.servertools.energie.configuration.Configuration;
 
 public class SwitchStart {
 
@@ -45,7 +46,7 @@ public class SwitchStart {
 
 
   public static void main(String[] args) {
-        new CommandoLineInterpreter(args, new VerbindungEnerGie());
+    new CommandoLineInterpreter(args, new VerbindungEnerGie());
   }
 
 }

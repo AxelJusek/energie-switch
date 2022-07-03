@@ -10,7 +10,8 @@ enum ConfigurationLoggingTexts {
   THE_FILE_EXCEPTION("The file {} throw an Exception: "),
   THE_DIRECTORY_NEEDED_TO_BE_CREATED("The directory for the configuration needed to be created: {}"),
   PROPERTIES_OBJECT_NULL("The properties-object is null, please delete the software!"),
-  IO_EXCEPTION_AT_LOADING("Es gab eine IO-Exception beim Laden der Konfiguration.");
+  IO_EXCEPTION_AT_LOADING("Es gab eine IO-Exception beim Laden der Konfiguration."),
+  STARTING_WITH_CONFIG("Starting with the configuration file {}");
   
   private String text;
   
