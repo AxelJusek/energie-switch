@@ -459,7 +459,9 @@ public class VerbindungEnerGie implements ConnectionEnergie {
 
     var socket =
         vEnGen.neueTCPVerbindung(verbindungsDaten.getIpAddress(), verbindungsDaten.getPort());
-    vEnGen.anmelden(key, socket);
+    if (null != socket) {
+      vEnGen.anmelden(key, socket);
+    }
     return vEnGen;
   }
 

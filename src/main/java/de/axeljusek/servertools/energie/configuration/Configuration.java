@@ -43,62 +43,46 @@ import org.slf4j.LoggerFactory;
 
 public class Configuration {
   private static Logger log = LoggerFactory.getLogger(Configuration.class);
-  private static String defaultKonfigurationFile = "konfiguration.conf";
+  private static String defaultConfigurationFile = "konfiguration.conf";
   private static Properties properties;
-  private static String konfDir = ".energie_switch";
+  private static String confDir = ".energie_switch";
   private static String pathToHome = System.getProperty("user.home");
   private static String fileSeparator = System.getProperty("file.separator");
 
-  private static final String ATTEMPT_TO_CREATE_DEFAULT_CONFIG_CONFLICT =
-      "Attempt to create the default configuration, while the file already exists: {}";
-  private static final String THE_CONFIG_FILE_WAS_CREATED =
-      "The default configuration needed to be created: {}";
-  private static final String THE_FILE_COULDNOT_BE_CREATED = "The file {} couldn't be created. ";
-  private static final String THE_FILE_DOES_NOT_EXIST = "The file {} does NOT exist. ";
-  private static final String THE_FILE_NOT_A_FILE = "The file {} is not a file. ";
-  private static final String THE_FILE_EXCEPTION = "The file {} throw an Exception: ";
-  private static final String THE_DIRECTORY_NEEDED_TO_BE_CREATED =
-      "The directory for the configuration needed to be created: {}";
-  private static final String PROPERTIES_OBJECT_NULL =
-      "The properties-object is null, please delete the software!";
-  private static final String IO_EXCEPTION_AT_LOADING =
-      "Es gab eine IO-Exception beim Laden der Konfiguration.";
-
-  private static Configuration konf;
-
+  private static Configuration configuration;
 
   public static Configuration getInstance() {
-    if (null == konf) {
-      konf = new Configuration();
+    if (null == configuration) {
+      configuration = new Configuration();
       String standardKonfigFile =
-          pathToHome + fileSeparator + konfDir + fileSeparator + defaultKonfigurationFile;
-      var konfFile = getConfigurationFile(standardKonfigFile);
-      loadConfiguration(konfFile);
+          pathToHome + fileSeparator + confDir + fileSeparator + defaultConfigurationFile;
+      var confFile = getConfigurationFile(standardKonfigFile);
+      loadConfiguration(confFile);
     }
-    return konf;
+    return configuration;
   }
 
   public static Configuration getInstanceForConfigFilename(String filename) {
-    if (null == konf) {
-      konf = new Configuration();
+    if (null == configuration) {
+      configuration = new Configuration();
     }
-    File konfFile;
-    
-    var url = konf.getClass().getClassLoader().getResource(filename);
+    File confFile;
+
+    var url = configuration.getClass().getClassLoader().getResource(filename);
     if (null == url) {
-      konfFile = getConfigurationFile(filename);
+      confFile = getConfigurationFile(filename);
     } else {
-      konfFile = getConfigurationFile(url.getPath());
+      confFile = getConfigurationFile(url.getPath());
     }
-    loadConfiguration(konfFile);
-    return konf;
+    loadConfiguration(confFile);
+    return configuration;
   }
 
   /**
    * This method is only for testing purposes, do NOT use ever!
    */
   protected void clearConf() {
-    Configuration.konf = null;
+    Configuration.configuration = null;
   }
 
   private Configuration() {
@@ -108,22 +92,25 @@ public class Configuration {
   protected static File getConfigurationFile(String fileName) {
     var defaultConfigurationFile = new File(fileName);
     if (!defaultConfigurationFile.exists()) {
-      var directoryOfEnergenie = new File(pathToHome + fileSeparator + konfDir);
+      var directoryOfEnergenie = new File(pathToHome + fileSeparator + confDir);
       if (!directoryOfEnergenie.exists()) {
         directoryOfEnergenie.mkdir();
-        log.warn(THE_DIRECTORY_NEEDED_TO_BE_CREATED, directoryOfEnergenie.getAbsolutePath());
+        log.warn(ConfigurationLoggingTexts.THE_DIRECTORY_NEEDED_TO_BE_CREATED.getText(),
+            directoryOfEnergenie.getAbsolutePath());
       }
 
       try {
         boolean created = defaultConfigurationFile.createNewFile();
         if (created) {
-          log.warn(THE_CONFIG_FILE_WAS_CREATED, defaultConfigurationFile.getAbsolutePath());
+          log.warn(ConfigurationLoggingTexts.THE_CONFIG_FILE_WAS_CREATED.getText(),
+              defaultConfigurationFile.getAbsolutePath());
         } else {
-          log.error(ATTEMPT_TO_CREATE_DEFAULT_CONFIG_CONFLICT,
+          log.error(ConfigurationLoggingTexts.ATTEMPT_TO_CREATE_DEFAULT_CONFIG_CONFLICT.getText(),
               defaultConfigurationFile.getAbsolutePath());
         }
       } catch (IOException e) {
-        log.error(THE_FILE_COULDNOT_BE_CREATED, defaultConfigurationFile.getAbsolutePath());
+        log.error(ConfigurationLoggingTexts.THE_FILE_COULDNOT_BE_CREATED.getText(),
+            defaultConfigurationFile.getAbsolutePath());
         e.printStackTrace();
       }
     }
@@ -134,19 +121,22 @@ public class Configuration {
     return properties.getProperty(key);
   }
 
-  private static void loadConfiguration(File konfFile) {
-    if (konfFile.exists()) {
-      if (konfFile.isFile()) {
-        try (var inStream = new FileInputStream(konfFile);) {
-          loadConfigurationFromFileToProperties(inStream);
+  private static void loadConfiguration(File configurationFile) {
+    if (configurationFile.exists()) {
+      if (configurationFile.isFile()) {
+        try (var inStream = new FileInputStream(configurationFile);) {
+          loadConfigurationFromFileIntoProperties(inStream);
         } catch (IOException e) {
-          log.error(THE_FILE_EXCEPTION, konfFile.getAbsolutePath(), e);
+          log.error(ConfigurationLoggingTexts.THE_FILE_EXCEPTION.getText(),
+              configurationFile.getAbsolutePath(), e);
         }
       } else {
-        log.error(THE_FILE_NOT_A_FILE, konfFile.getAbsolutePath());
+        log.error(ConfigurationLoggingTexts.THE_FILE_NOT_A_FILE.getText(),
+            configurationFile.getAbsolutePath());
       }
     } else {
-      log.error(THE_FILE_DOES_NOT_EXIST, konfFile.getAbsolutePath());
+      log.error(ConfigurationLoggingTexts.THE_FILE_DOES_NOT_EXIST.getText(),
+          configurationFile.getAbsolutePath());
     }
 
     addMissingProperties();
@@ -154,22 +144,22 @@ public class Configuration {
 
   private static void addMissingProperties() {
     if (null != properties) {
-      for (Configurationsvalues konfW : Configurationsvalues.values()) {
-        if (!properties.containsKey(konfW.getName())) {
-          properties.put(konfW.getName(), konfW.getDefaultValue());
+      for (Configurationsvalues configurationValues : Configurationsvalues.values()) {
+        if (!properties.containsKey(configurationValues.getName())) {
+          properties.put(configurationValues.getName(), configurationValues.getDefaultValue());
         }
       }
     } else {
-      log.error(PROPERTIES_OBJECT_NULL);
+      log.error(ConfigurationLoggingTexts.PROPERTIES_OBJECT_NULL.getText());
     }
   }
 
-  private static void loadConfigurationFromFileToProperties(FileInputStream inStream) {
+  private static void loadConfigurationFromFileIntoProperties(FileInputStream inStream) {
     properties = new Properties();
     try {
       properties.load(inStream);
     } catch (IOException e) {
-      log.error(IO_EXCEPTION_AT_LOADING, e);
+      log.error(ConfigurationLoggingTexts.IO_EXCEPTION_AT_LOADING.getText(), e);
     }
   }
 

@@ -115,21 +115,25 @@ public class SchaltZustand {
    * @return
    */
   public String getSchaltZustand(int dose) {
+    Schaltzustaende schaltZustand = Schaltzustaende.Unklar;
+    byte[] encryptedStatus = this.verEngenie.getEncryptedStatus();
+    
+    if (null != encryptedStatus) {
+      int sc0 = Byte.toUnsignedInt(encryptedStatus[dose]);
+      int k1 = Byte.toUnsignedInt(key[1]);
+      int k0 = Byte.toUnsignedInt(key[0]);
+      int t3 = Byte.toUnsignedInt(task[3]);
+      int t2 = Byte.toUnsignedInt(task[2]);
 
-    int sc0 = Byte.toUnsignedInt(this.verEngenie.getEncryptedStatus()[dose]);
-    int k1 = Byte.toUnsignedInt(key[1]);
-    int k0 = Byte.toUnsignedInt(key[0]);
-    int t3 = Byte.toUnsignedInt(task[3]);
-    int t2 = Byte.toUnsignedInt(task[2]);
+      // stat[3-i]=(((statcryp[i]-key[1])^key[0])-task[3])^task[2]
 
-    // stat[3-i]=(((statcryp[i]-key[1])^key[0])-task[3])^task[2]
+      int int4 = berechneStatusWert(dose, sc0, k1, k0, t3, t2);
 
-    int int4 = berechneStatusWert(dose, sc0, k1, k0, t3, t2);
-
-    byte[] result = VerbindungEnerGie.convertIntToHexByteArray(int4);
-
-    Schaltzustaende schaltZustand = Schaltzustaende.getZustandByInt(int4);
-    log.info("Schaltzustand:" + result[0] + ":" + result[1]);
+      schaltZustand = Schaltzustaende.getZustandByInt(int4);
+      
+      byte[] result = VerbindungEnerGie.convertIntToHexByteArray(int4);
+      log.info("Schaltzustand:" + result[0] + ":" + result[1]);
+    }
     return schaltZustand.getDefaultExpression();
   }
 
