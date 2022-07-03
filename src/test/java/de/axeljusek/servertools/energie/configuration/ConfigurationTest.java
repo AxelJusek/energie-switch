@@ -44,6 +44,18 @@ class ConfigurationTest {
   }
   
   @Test
+  void testGetConfigurationFileExistingFile() {
+    Configuration conf2 = Configuration.getInstance();
+    conf2.clearConf();
+    
+    String fileWithPath = "./src/test/resources/konfiguration.conf";
+    Configuration conf = Configuration.getInstanceForConfigFilename(fileWithPath);
+    assertNotNull(conf);
+    
+    assertEquals("192.168.178.111", conf.getValueForKey(Configurationsvalues.IP_ADDRESS.getName()));
+  }
+  
+  @Test
   void testGetConfigurationFileForNewDirectory() {
     Configuration conf2 = Configuration.getInstance();
     conf2.clearConf();
